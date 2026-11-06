@@ -1,0 +1,429 @@
+<meta charset="utf-8">
+<title>간판 설계실 랜딩</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;500;600;700;800;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Do+Hyeon&family=Jua&family=Gugi&family=Nanum+Pen+Script&family=Yeon+Sung&family=Song+Myung&family=Gowun+Batang:wght@700&family=Hahmlet:wght@300;800&family=Orbit&family=Bagel+Fat+One&family=Dongle:wght@700&display=swap&text=%20%2C015m%EA%B0%84%EA%B2%B0%EA%B3%BC%EA%B5%AD%EA%B8%B0%EA%BD%83%EB%84%A4%EB%8B%AC%EB%8F%99%EB%96%A1%EB%9E%98%EB%A1%9D%EB%A3%A8%EB%A6%AC%EB%A7%88%EB%AA%A8%EB%AF%B8%EB%B0%94%EB%B0%A4%EB%B0%A5%EB%B0%A9%EB%B2%A0%EB%B2%BD%EB%B6%84%EB%B9%9B%EC%83%88%EC%84%9C%EC%86%8C%EC%88%98%EC%8B%9D%EC%8B%A4%EC%98%A8%EC%99%80%EC%9A%A9%EC%9A%B0%EC%9D%B4%EC%9D%B8%EC%9D%BC%EC%A0%90%EC%A7%80%EC%A7%91%EC%B4%88%EC%B9%98%EC%B9%B4%EC%BB%A4%ED%8C%90%ED%8E%98%ED%8E%B8%ED%95%99%ED%95%9C%ED%95%B4%ED%98%84">
+<style>
+:root{
+  --ground:#fbfaf7; --ground-2:#f3f1ec; --ink:#17161a; --sub:#65626a; --line:#e7e3dd;
+  --wine:#8e3a4d; --wine-ink:#ffffff; --wine-soft:#f6e9ec;
+  --pink:#e7b3bd; --sage:#a9c2a0; --tile-wine:#9b4a5b; --butter:#e6cf92; --blue:#a3b6cc; --lilac:#c0b3d4; --olive:#a4a872;
+  --f:"Gothic A1","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --gutter:clamp(16px,3.2vw,48px); --max:1240px;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --ground:#121114; --ground-2:#1b1a1e; --ink:#efece7; --sub:#a09ca6; --line:#2b2930; --wine:#e0879a; --wine-ink:#1a0c10; --wine-soft:#2a1a1f; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --ground:#121114; --ground-2:#1b1a1e; --ink:#efece7; --sub:#a09ca6; --line:#2b2930; --wine:#e0879a; --wine-ink:#1a0c10; --wine-soft:#2a1a1f; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font:400 16px/1.65 var(--f);padding-inline:var(--gutter);overflow-x:hidden;word-break:keep-all;overflow-wrap:break-word;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+h1,h2,h3,p{margin:0}
+h1,h2,h3{text-wrap:balance;letter-spacing:-.02em}
+.w{max-width:var(--max);margin-inline:auto}
+.bleed{margin-inline:calc(-1*var(--gutter));padding-inline:var(--gutter)}
+:focus-visible{outline:2px solid var(--wine);outline-offset:3px;border-radius:2px}
+.num{font-variant-numeric:tabular-nums}
+
+.notice{background:var(--ink);color:var(--ground);font-size:13px;text-align:center;padding-block:8px;padding-top:calc(8px + env(safe-area-inset-top,0px))}
+.notice a{text-decoration:underline;text-underline-offset:3px;margin-left:6px}
+
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:color-mix(in srgb,var(--ground) 92%,transparent);backdrop-filter:saturate(1.4) blur(10px);-webkit-backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line)}
+.nav .w{display:flex;align-items:center;height:68px;gap:36px}
+.mark{display:flex;align-items:center;gap:10px;font:800 18px var(--f);letter-spacing:-.03em;white-space:nowrap}
+.mark i{width:26px;height:26px;border-radius:5px;background:var(--ink);display:grid;place-items:center;color:var(--ground);font:900 13px var(--f);font-style:normal}
+.mark small{font:500 11px var(--f);color:var(--sub);letter-spacing:0;border:1px solid var(--line);border-radius:99px;padding:1px 7px}
+.menu{display:flex;align-items:center;gap:4px;list-style:none;margin:0;padding:0;height:100%}
+.menu>li{height:100%;display:flex;align-items:center}
+.menu>li>a,.menu>li>button{font:600 15px var(--f);color:var(--ink);background:none;border:0;padding:8px 14px;border-radius:6px;cursor:pointer;display:flex;align-items:center;gap:6px}
+.menu>li>a:hover,.menu>li>button:hover{background:var(--ground-2)}
+.menu .caret{width:8px;height:8px;border-right:1.6px solid currentColor;border-bottom:1.6px solid currentColor;transform:rotate(45deg) translateY(-3px);transition:transform .2s}
+.has-mega:hover .caret,.has-mega:focus-within .caret{transform:rotate(-135deg) translate(-2px,-1px)}
+.right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.login{font:600 15px var(--f);padding:8px 12px;color:var(--sub)}
+.login:hover{color:var(--ink)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:700 15px var(--f);border-radius:8px;padding:12px 20px;border:0;cursor:pointer;transition:transform .2s,background .2s,box-shadow .2s;white-space:nowrap}
+.btn:active{transform:translateY(1px)}
+.btn-main{background:var(--wine);color:var(--wine-ink)}
+.btn-main:hover{background:color-mix(in srgb,var(--wine) 86%,var(--ink))}
+.btn-line{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--line)}
+.btn-line:hover{box-shadow:inset 0 0 0 1.5px var(--ink)}
+.btn-sm{padding:9px 16px;font-size:14px}
+.arrow::after{content:"→";display:inline-block;margin-left:6px;font-weight:500;transition:transform .2s}
+a:hover .arrow::after,a.arrow:hover::after{transform:translateX(3px)}
+
+.mega{position:absolute;left:0;right:0;top:100%;background:var(--ground);border-bottom:1px solid var(--line);box-shadow:0 24px 40px -24px rgba(0,0,0,.18);opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity .2s,transform .2s,visibility .2s}
+.has-mega:hover .mega,.has-mega:focus-within .mega{opacity:1;visibility:visible;transform:none}
+.mega .w{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;padding-block:20px 26px}
+.mega a{display:grid;gap:10px;padding:10px;border-radius:10px}
+.mega a:hover{background:var(--ground-2)}
+.mega .th{aspect-ratio:16/10;border-radius:6px;overflow:hidden;display:grid;place-items:center}
+.mega .th img{width:100%;height:100%;object-fit:cover}
+.mega b{font:700 15px var(--f);display:flex;gap:6px;align-items:center}
+.mega span.d{font-size:13px;color:var(--sub);line-height:1.5}
+.tag{font:600 11px var(--f);font-style:normal;color:var(--wine);background:var(--wine-soft);border-radius:99px;padding:1px 7px}
+.burger{display:none;width:40px;height:40px;border:0;background:none;cursor:pointer;margin-left:4px;border-radius:8px}
+.burger span{display:block;width:18px;height:1.8px;background:var(--ink);margin:4px auto}
+.sheet{display:none}
+@media (max-width:960px){
+  .menu,.right .login{display:none}
+  .burger{display:block}
+  .sheet{position:fixed;inset:calc(68px + env(safe-area-inset-top,0px)) 0 0;background:var(--ground);z-index:29;padding:12px var(--gutter) 40px;overflow:auto;display:none}
+  .sheet.open{display:block}
+  .sheet a{display:flex;justify-content:space-between;padding:16px 4px;border-bottom:1px solid var(--line);font:600 17px var(--f)}
+  .sheet a span{font:400 13px var(--f);color:var(--sub)}
+}
+@media (max-width:420px){.right .btn-sm{padding:8px 12px;font-size:13px}.mark small{display:none}}
+
+.hero{padding-block:clamp(56px,8vw,112px) clamp(32px,4vw,56px);display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:40px;align-items:end}
+.eyebrow{font:700 13px var(--f);color:var(--wine);letter-spacing:.02em;margin-bottom:18px;display:block}
+.hero h1{font:900 clamp(40px,6vw,80px)/1.08 var(--f);letter-spacing:-.045em}
+.hero .lede{font-size:clamp(16px,1.4vw,19px);color:var(--sub);max-width:34em;margin-top:22px}
+.hero .ctas{display:flex;flex-wrap:wrap;gap:10px;margin-top:30px}
+.spec{border-top:1.5px solid var(--ink);display:grid}
+.spec div{display:flex;justify-content:space-between;gap:16px;padding-block:12px;border-bottom:1px solid var(--line);font-size:14px}
+.spec span{color:var(--sub)}
+.spec b{font-weight:700}
+.spec .cap{font-size:12px;color:var(--sub);padding-top:10px;border:0}
+@media (max-width:860px){.hero{grid-template-columns:1fr;align-items:start}}
+
+.rows{display:grid;grid-template-columns:minmax(0,1fr);gap:4px;padding-block:8px 24px}
+.row{position:relative;min-width:0;--tw:272px;--th:216px}
+.row-head{display:flex;align-items:baseline;gap:12px;max-width:var(--max);margin-inline:auto;padding-inline:2px}
+.row-head b{font:800 15px var(--f)}
+.row-head span{font-size:13px;color:var(--sub)}
+.row-head a{margin-left:auto;font:600 13px var(--f);color:var(--sub);white-space:nowrap}
+.row-head a:hover{color:var(--ink)}
+@media (max-width:560px){.row-head span{display:none}}
+.clip{overflow:hidden;padding-block:22px;margin-inline:calc(-1*var(--gutter))}
+.track{display:flex;gap:18px;width:max-content;animation:to-left 90s linear infinite}
+.row.rt .track{animation-name:to-right;animation-duration:100s}
+.row:nth-child(3) .track{animation-delay:-40s}
+.row:hover .track,.row:focus-within .track{animation-play-state:paused}
+@keyframes to-left{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes to-right{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+.tile{flex:none;width:var(--tw);height:var(--th);border-radius:4px;position:relative;overflow:hidden;display:grid;place-items:center;margin:0;background:var(--c);color:var(--on);transition:transform .45s cubic-bezier(.2,.75,.2,1),box-shadow .45s}
+.tile:hover{transform:scale(1.13);z-index:3;box-shadow:0 22px 44px -12px rgba(20,10,14,.35)}
+.tile figcaption{position:absolute;left:14px;right:14px;bottom:11px;display:flex;justify-content:space-between;gap:8px;font:500 12px var(--f);color:var(--cap,rgba(40,20,24,.72))}
+.tile figcaption b{font-weight:700}
+.mask{width:74%;height:60%;background:var(--on);-webkit-mask:var(--m) center/contain no-repeat;mask:var(--m) center/contain no-repeat}
+.mul{width:82%;height:64%;object-fit:contain;mix-blend-mode:multiply}
+.photo{width:100%;height:100%;object-fit:cover}
+.sg{position:relative;width:80%;height:58%;display:grid;place-items:center}
+.sg .mask{width:100%;height:100%}
+.sg-channel .mask{filter:drop-shadow(1px 1px 0 #3a2a1c) drop-shadow(1px 1px 0 #3a2a1c) drop-shadow(1px 1px 0 #3a2a1c) drop-shadow(2px 2px 0 #2c1f14) drop-shadow(0 0 14px rgba(255,236,190,.55))}
+.sg-stand .mask{filter:drop-shadow(-12px 9px 6px rgba(0,0,0,.32))}
+.sg-neon .mask{background:#ffe3ea;filter:drop-shadow(0 0 2px #ffc2d2) drop-shadow(0 0 8px #ff7fa3) drop-shadow(0 0 20px #ff4f86)}
+.sg-scashi .mask{filter:drop-shadow(2px 2px 0 rgba(255,255,255,.9)) drop-shadow(4px 5px 3px rgba(0,0,0,.28))}
+.sg-blade{width:auto;height:auto}
+.sg-blade .disc{width:146px;height:146px;border-radius:50%;background:#fbf6ee;box-shadow:inset 0 0 0 6px #7a3140,0 10px 18px rgba(0,0,0,.25);display:grid;place-items:center;position:relative}
+.sg-blade .disc .mask{width:70%;height:60%}
+.sg-blade .arm{position:absolute;right:-46px;top:50%;width:46px;height:8px;background:#3a3a3a;border-radius:2px;transform:translateY(-50%)}
+.sg-flex{width:86%;height:52%;background:linear-gradient(#fffdf8,#fff4e6);border-radius:3px;box-shadow:0 0 0 5px #ece4d8,0 0 26px rgba(255,248,225,.9),0 12px 16px rgba(0,0,0,.2)}
+.sg-flex .mask{width:78%;height:70%}
+.sg-awning{width:100%;height:100%;display:grid;grid-template-rows:38% 1fr;place-items:center}
+.sg-awning .awn{width:100%;height:100%;background:repeating-linear-gradient(90deg,#fbf3ea 0 26px,#7a3140 26px 52px);-webkit-mask:radial-gradient(13px at 13px 100%,#0000 98%,#000) 0 0/26px 100%;mask:radial-gradient(13px at 13px 100%,#0000 98%,#000) 0 0/26px 100%}
+.sg-awning .mask{width:70%;height:70%}
+.sg-aframe{width:auto;height:88%;aspect-ratio:.72;background:#2f3a30;clip-path:polygon(12% 0,88% 0,100% 100%,0 100%)}
+.sg-aframe .mask{width:70%;height:40%;background:#f2eee4}
+.sg-glass{width:88%;height:62%;background:linear-gradient(115deg,rgba(255,255,255,.45),rgba(255,255,255,.08) 40%,rgba(255,255,255,.3) 70%,rgba(255,255,255,.05));border:6px solid #3c3b40}
+.sg-glass .mask{width:76%;height:62%;background:#fff}
+.fs{display:grid;gap:4px;text-align:center;padding-inline:14px}
+.fs .s{font-size:42px;line-height:1.05;color:var(--on)}
+.fs .e{font-size:14px;opacity:.72;color:var(--on)}
+@media (max-width:640px){.row{--tw:196px;--th:158px}.fs .s{font-size:30px}.sg-blade .disc{width:100px;height:100px}}
+
+section.s{padding-block:clamp(72px,9vw,128px);border-top:1px solid var(--line)}
+.sh{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px 48px;margin-bottom:clamp(36px,5vw,64px);align-items:end}
+.sh h2{font:800 clamp(30px,3.6vw,46px)/1.2 var(--f)}
+.sh p{color:var(--sub);max-width:34em}
+@media (max-width:860px){.sh{grid-template-columns:1fr}}
+
+.go{display:grid;gap:clamp(56px,7vw,96px)}
+.go article{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:clamp(28px,5vw,72px);align-items:center}
+.go article:nth-child(even) .pic{order:2}
+.go .pic{border-radius:6px;overflow:hidden;aspect-ratio:16/11;display:grid;place-items:center;background:var(--c)}
+.go .pic img{width:100%;height:100%;object-fit:cover}
+.go .pic img.contain{object-fit:contain;padding:6%}
+.go .k{font:700 13px var(--f);color:var(--wine)}
+.go h3{font:800 clamp(26px,2.8vw,36px)/1.25 var(--f);margin-top:12px}
+.go p{color:var(--sub);margin-top:14px;max-width:32em}
+.go ul{list-style:none;margin:22px 0 0;display:grid;gap:10px;border-top:1px solid var(--line);padding:18px 0 0}
+.go li{display:flex;gap:12px;font-size:15px}
+.go li::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--ink);margin-top:10px;flex:none}
+.go .act{display:flex;flex-wrap:wrap;align-items:center;gap:16px;margin-top:28px}
+.go .price{font-size:14px;color:var(--sub)}
+.go .price b{color:var(--ink)}
+.fontpic{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:8%;width:100%;height:100%}
+.fontpic span{background:rgba(255,255,255,.55);border-radius:4px;display:grid;place-items:center;font-size:clamp(20px,2.6vw,34px);color:#2f4a2c}
+@media (max-width:860px){.go article{grid-template-columns:1fr}.go article:nth-child(even) .pic{order:0}}
+
+.steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));list-style:none;margin:0;padding:0;counter-reset:n}
+.steps li{counter-increment:n;padding:22px 24px 8px 0;border-top:1.5px solid var(--ink);display:grid;gap:8px;align-content:start}
+.steps li+li{padding-left:24px}
+.steps li::before{content:counter(n);font:800 13px var(--f);color:var(--wine)}
+.steps b{font:800 19px var(--f)}
+.steps p{color:var(--sub);font-size:15px}
+.steps small{font-size:13px;color:var(--sub)}
+@media (max-width:860px){.steps{grid-template-columns:1fr 1fr;gap:28px 0}.steps li:nth-child(3){padding-left:0}}
+@media (max-width:520px){.steps{grid-template-columns:1fr}.steps li+li{padding-left:0}}
+
+.case{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:clamp(28px,5vw,64px);align-items:start}
+.case .pic{border-radius:6px;overflow:hidden;background:#f1dcd7}
+.case .pic img{display:block;width:100%}
+.case q{display:block;font:700 clamp(20px,2vw,24px)/1.5 var(--f);quotes:"“" "”"}
+.case .who{margin-top:10px;font-size:14px;color:var(--sub)}
+.vt{width:100%;border-collapse:collapse;font-size:14px;margin-top:28px}
+.vt th,.vt td{text-align:left;padding:11px 6px;border-bottom:1px solid var(--line)}
+.vt th{font-weight:600;color:var(--sub);font-size:12.5px}
+.pill{display:inline-block;font:700 12px var(--f);padding:3px 9px;border-radius:99px;white-space:nowrap}
+.pill.ok{background:#e1f0e6;color:#1f6b45}.pill.warn{background:#f8ecd9;color:#8a5308}
+.case .note{font-size:13.5px;color:var(--sub);margin-top:14px}
+.tw{overflow-x:auto}
+@media (max-width:860px){.case{grid-template-columns:1fr}}
+
+.prices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.pc{border:1px solid var(--line);border-radius:10px;padding:28px;display:grid;gap:18px;align-content:start}
+.pc.main{border:1.5px solid var(--ink)}
+.pc .name{font:800 17px var(--f);display:flex;justify-content:space-between;align-items:center}
+.pc .amt{font:900 40px/1 var(--f);letter-spacing:-.03em}
+.pc .amt small{font:500 15px var(--f);color:var(--sub);letter-spacing:0}
+.pc p{color:var(--sub);font-size:14.5px}
+.pc ul{margin:0;list-style:none;display:grid;gap:9px;font-size:15px;border-top:1px solid var(--line);padding:18px 0 0}
+.pc li{display:flex;gap:10px}
+.pc li::before{content:"✓";color:var(--wine);font-weight:800}
+@media (max-width:900px){.prices{grid-template-columns:1fr}}
+
+.faq{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:48px}
+.faq h2{font:800 clamp(28px,3.2vw,40px)/1.2 var(--f)}
+.faq .intro{color:var(--sub);margin-top:14px}
+.faq details{border-bottom:1px solid var(--line);padding-block:20px}
+.faq summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:20px;font:700 17px var(--f)}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"";width:9px;height:9px;border-right:1.8px solid var(--sub);border-bottom:1.8px solid var(--sub);transform:rotate(45deg);margin-top:6px;flex:none;transition:transform .2s}
+.faq details[open] summary::after{transform:rotate(-135deg)}
+.faq details p{margin-top:12px;color:var(--sub);max-width:60ch}
+@media (max-width:860px){.faq{grid-template-columns:1fr;gap:8px}}
+
+.band{background:var(--ink);color:var(--ground);border-radius:14px;padding:clamp(36px,6vw,72px);display:grid;grid-template-columns:minmax(0,1fr) auto;gap:28px;align-items:center;margin-block:clamp(56px,8vw,96px)}
+.band h2{font:900 clamp(28px,3.6vw,44px)/1.2 var(--f)}
+.band p{opacity:.72;margin-top:12px}
+.band .btn-main{background:var(--pink);color:#2a1418}
+@media (max-width:760px){.band{grid-template-columns:1fr}}
+
+footer{border-top:1px solid var(--line);padding-block:56px 40px;font-size:14px}
+.fcols{display:grid;grid-template-columns:1.4fr repeat(4,minmax(0,1fr));gap:32px}
+.fcols h4{margin:0 0 14px;font:700 14px var(--f)}
+.fcols ul{list-style:none;margin:0;padding:0;display:grid;gap:9px;color:var(--sub)}
+.fcols a:hover{color:var(--ink)}
+.fcols .about{color:var(--sub);display:grid;gap:12px;align-content:start}
+.legal{margin-top:44px;padding-top:22px;border-top:1px solid var(--line);display:grid;gap:8px;font-size:12.5px;color:var(--sub)}
+.legal .links{display:flex;flex-wrap:wrap;gap:18px;font-size:13px}
+.legal .links b{color:var(--ink)}
+@media (max-width:900px){.fcols{grid-template-columns:1fr 1fr}.fcols .about{grid-column:1/-1}}
+
+@media (prefers-reduced-motion:reduce){.track{animation:none}.clip{overflow-x:auto}.tile,.mega{transition:none}.tile:hover{transform:none}}
+</style>
+
+<div class="notice bleed">오픈 전 미리보기입니다. 첫 의뢰 10건은 사람이 24시간 안에 직접 다듬어 드립니다.<a href="#price">의뢰 안내</a></div>
+
+<header class="nav bleed">
+  <div class="w">
+    <a class="mark" href="#top"><i>간</i>간판 설계실<small>가칭</small></a>
+    <ul class="menu">
+      <li class="has-mega">
+        <button type="button" aria-haspopup="true">서비스<span class="caret"></span></button>
+        <div class="mega bleed">
+          <div class="w">
+            <a href="editor.html#logo"><span class="th" style="background:var(--pink)"><img src="a/s_sil.jpg" alt=""></span><b>로고 만들기</b><span class="d">가게 이름으로 세 안, 간판 판정까지</span></a>
+            <a href="editor.html#sign"><span class="th" style="background:#f1dcd7"><img src="a/w03.jpg" alt=""></span><b>간판 디자인</b><span class="d">간판 종류를 고르면 벽 위 45° 시안</span></a>
+            <a href="editor.html#type"><span class="th" style="background:var(--sage);font:26px 'Black Han Sans',var(--f);color:#2f4a2c">고객A 네일</span><b>간판 글씨</b><span class="d">상호 글씨만 따로 뽑기</span></a>
+            <a href="editor.html#check"><span class="th" style="background:#fff"><img src="a/s_front.jpg" alt="" style="object-fit:contain"></span><b>제작 판정 <em class="tag">무료</em></b><span class="d">가진 로고가 간판이 되는지</span></a>
+            <a href="editor.html#color"><span class="th" style="background:var(--butter)"><img src="a/s_three.jpg" alt="" style="object-fit:contain"></span><b>브랜드 컬러 <em class="tag">무료</em></b><span class="d">가게 사진으로 색 3벌</span></a>
+          </div>
+        </div>
+      </li>
+      <li><a href="#case">사례</a></li>
+      <li><a href="#price">가격</a></li>
+      <li><a href="#faq">간판 가이드</a></li>
+    </ul>
+    <div class="right">
+      <a class="login" href="#top">로그인</a>
+      <a class="btn btn-main btn-sm" href="editor.html">무료로 시작하기</a>
+      <button class="burger" id="burger" aria-label="메뉴 열기" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+<nav class="sheet" id="sheet" aria-label="모바일 메뉴">
+  <a href="editor.html#logo">로고 만들기 <span>세 안 + 판정</span></a>
+  <a href="editor.html#sign">간판 디자인 <span>벽 위 45° 시안</span></a>
+  <a href="editor.html#type">간판 글씨 <span>상호 글씨만</span></a>
+  <a href="editor.html#check">제작 판정 <span>무료</span></a>
+  <a href="editor.html#color">브랜드 컬러 <span>무료</span></a>
+  <a href="#case">사례</a><a href="#price">가격</a><a href="#faq">간판 가이드</a><a href="#top">로그인</a>
+</nav>
+
+<main id="top">
+  <div class="w hero">
+    <div>
+      <span class="eyebrow">로고 · 간판 디자인 · 간판 글씨</span>
+      <h1>간판이 되는<br>로고를 만듭니다.</h1>
+      <p class="lede">가게 이름 하나로 로고 세 가지를 뽑고, 그 로고가 실제 철판과 채널로 만들어지는지 mm 단위로 판정합니다. 간판집에 그대로 넘길 원본 파일까지 드립니다.</p>
+      <div class="ctas">
+        <a class="btn btn-main" href="editor.html#logo"><span class="arrow">무료로 로고 만들기</span></a>
+        <a class="btn btn-line" href="editor.html#check">가진 로고 판정받기</a>
+      </div>
+    </div>
+    <div class="spec" aria-label="판정 기준">
+      <div><span>가장 가는 획</span><b class="num">6 mm 이상</b></div>
+      <div><span>글자 속 빈틈</span><b class="num">13 mm 이상</b></div>
+      <div><span>까치발 봉 지름</span><b class="num">10 mm</b></div>
+      <div><span>벽에서 띄우기</span><b class="num">40–120 mm</b></div>
+      <div class="cap">까치발 철문자 기준. 공장 확인 전 가정값이며 간판 종류마다 다릅니다.</div>
+    </div>
+  </div>
+
+  <div class="rows" aria-label="만든 것들">
+    <div class="row lf"><div class="row-head"><b>로고</b><span>한 번에 하나씩만 바꾼 세 안</span><a href="editor.html#logo" class="arrow">로고 만들기</a></div><div class="clip"><div class="track" id="r1"></div></div></div>
+    <div class="row rt"><div class="row-head"><b>간판 종류</b><span>같은 글씨, 다른 간판</span><a href="editor.html#sign" class="arrow">간판 디자인</a></div><div class="clip"><div class="track" id="r2"></div></div></div>
+    <div class="row lf"><div class="row-head"><b>간판 글씨</b><span>상업용으로 쓸 수 있는 글꼴만</span><a href="editor.html#type" class="arrow">간판 글씨</a></div><div class="clip"><div class="track" id="r3"></div></div></div>
+    <div class="row rt"><div class="row-head"><b>벽 위 시안</b><span>지나가는 사람 눈높이, 45°</span><a href="#case" class="arrow">사례 보기</a></div><div class="clip"><div class="track" id="r4"></div></div></div>
+  </div>
+
+  <section class="s" id="go"><div class="w">
+    <div class="sh"><h2>무엇부터 만들까요?</h2><p>필요한 것만 골라 시작하면 됩니다. 어디서 시작하든 같은 가게 파일에 쌓여서, 로고에서 간판으로 넘어갈 때 다시 그리지 않습니다.</p></div>
+    <div class="go">
+      <article>
+        <div class="pic" style="--c:#f1dcd7"><img src="a/p10.jpg" alt="잠든 고양이와 고객A 네일 한글 로고"></div>
+        <div>
+          <span class="k">로고 만들기</span>
+          <h3>가게 이름과 분위기만 주세요.</h3>
+          <p>심벌은 AI가 그리고, 글씨는 라이선스가 확인된 글꼴로 사람이 조판합니다. 한글 철자가 틀린 로고는 나오지 않습니다.</p>
+          <ul><li>글씨만, 또는 색만 다른 세 안</li><li>고른 안의 원본 파일(ai · svg)</li><li>간판으로 만들 수 있는지 판정 한 장</li></ul>
+          <div class="act"><a class="btn btn-main" href="editor.html#logo"><span class="arrow">로고 만들러 가기</span></a><span class="price">미리보기 <b>무료 2회</b> · 고화질 <b>6,000원</b></span></div>
+        </div>
+      </article>
+      <article>
+        <div class="pic" style="--c:#f1dcd7"><img src="a/w03.jpg" alt="고양이와 고객A네일 글씨를 45도에서 본 까치발 간판 시안"></div>
+        <div>
+          <span class="k">간판 디자인</span>
+          <h3>벽에 달기 전에, 벽에 달아 봅니다.</h3>
+          <p>채널, 까치발, 네온, 스카시 중 하나를 고르면 가게 벽 위에 45° 시안과 정면 치수도를 그립니다. 허가 신청에 쓰는 원색 도안의 재료가 됩니다.</p>
+          <ul><li>벽 위 주간 · 야간 · 45° 시안</li><li>정면 치수도와 까치발 타공 본 1:1</li><li>간판 종류별 제작 판정</li></ul>
+          <div class="act"><a class="btn btn-main" href="editor.html#sign"><span class="arrow">간판 디자인하러 가기</span></a><span class="price">의뢰 <b>25,000원</b> · 피드백 3번</span></div>
+        </div>
+      </article>
+      <article>
+        <div class="pic" style="--c:var(--sage)"><div class="fontpic"><span style="font-family:'Black Han Sans'">고객A 네일</span><span style="font-family:'Song Myung'">모래 서점</span><span style="font-family:'Jua'">소소 카페</span><span style="font-family:'Nanum Pen Script';font-size:clamp(26px,3.2vw,42px)">달빛 베이커리</span></div></div>
+        <div>
+          <span class="k">간판 글씨</span>
+          <h3>로고는 있고, 글씨만 필요하다면.</h3>
+          <p>상호를 넣으면 간판에 어울리는 글꼴 조합을 보여 드립니다. 전부 상업용으로 쓸 수 있는 글꼴이고, 간판 크기에서 획이 너무 가늘어지는 글꼴은 미리 걸러 냅니다.</p>
+          <ul><li>상호 글씨 여러 벌 비교</li><li>글꼴 라이선스 출처 표기</li><li>간판 크기에서 획 굵기 확인</li></ul>
+          <div class="act"><a class="btn btn-main" href="editor.html#type"><span class="arrow">간판 글씨 뽑으러 가기</span></a><span class="price">미리보기 <b>무료</b></span></div>
+        </div>
+      </article>
+      <article>
+        <div class="pic" style="--c:#ffffff"><img class="contain" src="a/s_front.jpg" alt="가로 1,500mm 치수선이 그려진 간판 정면도"></div>
+        <div>
+          <span class="k">제작 판정 · 무료</span>
+          <h3>이미 만든 로고, 간판이 될까요?</h3>
+          <p>챗GPT나 미리캔버스로 만든 로고를 올리면 간판 크기에서 가장 가는 획, 글자 속 빈틈, 조각 수를 잽니다. 안 되면 무엇을 바꾸면 되는지 같이 적어 드립니다.</p>
+          <ul><li>간판 종류별 가능 · 조건부 · 불가</li><li>그림 파일이면 벡터 원본으로 바꾸는 길 안내</li></ul>
+          <div class="act"><a class="btn btn-main" href="editor.html#check"><span class="arrow">내 로고 판정받기</span></a><span class="price"><b>무료</b></span></div>
+        </div>
+      </article>
+    </div>
+  </div></section>
+
+  <section class="s"><div class="w">
+    <div class="sh"><h2>진행 순서</h2><p>AI가 한 번에 그린 로고는 간판에서 무너집니다. 한 층씩 쌓고, 층마다 사장님이 고릅니다.</p></div>
+    <ol class="steps">
+      <li><b>가게 카드</b><p>상호, 업종, 간판 종류, 원하는 분위기를 적습니다.</p><small>2분</small></li>
+      <li><b>세 안 고르기</b><p>한 가지만 다른 세 안에서 마음에 드는 쪽을 고릅니다.</p><small>바로</small></li>
+      <li><b>제작 판정</b><p>mm 단위로 재서 안 되는 곳과 고칠 방법을 적습니다.</p><small>자동</small></li>
+      <li><b>파일 받기</b><p>원본, 치수도, 타공 본을 받아 간판집에 넘깁니다.</p><small>의뢰는 24시간</small></li>
+    </ol>
+  </div></section>
+
+  <section class="s" id="case"><div class="w">
+    <div class="sh"><h2>고객A 네일,<br>스케치에서 철문자까지</h2><p>그림판에 대충 그린 고양이에서 시작해 까치발 철문자 다섯 안까지 하루에 갔습니다. 사장님이 한 일은 고르기와 한 줄 말하기였습니다.</p></div>
+    <div class="case">
+      <div class="pic"><img src="a/w04.jpg" alt="고객A네일 글씨만 있는 간판을 45도에서 본 시안"></div>
+      <div>
+        <q>검은색 두 번째 고양이가 좋아요. 까치발로 할 거라서요.</q>
+        <p class="who">고객A 네일 · 세 번째 시안에서</p>
+        <div class="tw"><table class="vt">
+          <thead><tr><th>안</th><th>가장 가는 획</th><th>조각</th><th>판정</th></tr></thead>
+          <tbody>
+            <tr><td>A 영문 + 고양이</td><td class="num">7.6 mm</td><td class="num">16</td><td><span class="pill warn">조건부</span></td></tr>
+            <tr><td>B 한글 + 고양이</td><td class="num">6.0 mm</td><td class="num">24</td><td><span class="pill warn">조건부</span></td></tr>
+            <tr><td>D 정직한 한글 + 고양이</td><td class="num">10.0 mm</td><td class="num">14</td><td><span class="pill warn">조건부</span></td></tr>
+            <tr><td>E 글씨만</td><td class="num">10.0 mm</td><td class="num">12</td><td><span class="pill ok">제작 가능</span></td></tr>
+          </tbody>
+        </table></div>
+        <p class="note">조건부 셋은 이유가 같았습니다. 고양이 안쪽 흰 선이 8 mm라 지름 10 mm 봉이 들어가지 않습니다. 12 mm로 넓히면 풀립니다.</p>
+      </div>
+    </div>
+  </div></section>
+
+  <section class="s" id="price"><div class="w">
+    <div class="sh"><h2>가격</h2><p>간판 제작비는 따로입니다. 여기서 내는 돈은 디자인과 판정 값이고, 의뢰로 올라가면 먼저 낸 6,000원은 빼 드립니다.</p></div>
+    <div class="prices">
+      <div class="pc"><div class="name">미리보기</div><div class="amt num">0원 <small>2회</small></div><p>분위기가 맞는지 먼저 봅니다.</p><ul><li>로고 세 안 저화질</li><li>브랜드 컬러 3벌</li><li>제작 판정 요약</li></ul><a class="btn btn-line" href="editor.html">무료로 시작하기</a></div>
+      <div class="pc"><div class="name">한 번 더</div><div class="amt num">6,000원 <small>1회</small></div><p>고른 방향으로 한 번 더, 제대로.</p><ul><li>고화질 세 안</li><li>고른 안의 원본(ai · svg)</li><li>제작 판정 한 장</li></ul><a class="btn btn-line" href="editor.html">한 번 더 뽑기</a></div>
+      <div class="pc main"><div class="name">의뢰 <span class="tag">추천</span></div><div class="amt num">25,000원</div><p>사람이 24시간 안에 다듬어 드립니다.</p><ul><li>피드백 3번까지</li><li>벽 위 45° 시안 · 정면 치수도</li><li>까치발 타공 본 1:1 · 원본 파일</li><li>같은 상호 상표 1차 확인 메모</li></ul><a class="btn btn-main" href="editor.html">의뢰하기</a></div>
+    </div>
+  </div></section>
+
+  <section class="s" id="faq"><div class="w faq">
+    <div><h2>자주 묻는 것</h2><p class="intro">간판 종류, 비용, 허가는 간판 가이드에서 더 자세히 다룹니다.</p></div>
+    <div>
+      <details><summary>여기서 받은 파일을 동네 간판집에 가져가도 되나요?</summary><p>네. 간판집이 쓰는 벡터 원본(ai · svg)과 치수도, 까치발 타공 본을 드립니다. 제작은 원하시는 곳에서 하시면 됩니다.</p></details>
+      <details><summary>미리캔버스나 캔바로 만든 로고도 되나요?</summary><p>판정은 됩니다. 다만 그 편집기로 만든 로고는 회사 약관상 상표로 쓸 수 없어서, 간판으로 가기 전에 새로 그리는 걸 권해 드립니다.</p></details>
+      <details><summary>AI로 만든 로고도 제 것이 되나요?</summary><p>초안에 생성형 AI를 쓰고, 글씨는 사람이 조판합니다. AI가 만든 부분만으로는 저작권 등록이 되지 않고 사람이 다듬은 부분이 권리의 근거가 됩니다. 이 내용을 시안에 같이 적어 드립니다.</p></details>
+      <details><summary>간판 허가 서류도 해 주나요?</summary><p>허가 신청인은 사장님입니다. 신청에 필요한 원색 도안과 배치도로 쓸 수 있게 시안을 만들어 드리고, 제출은 사장님이나 간판집이 합니다.</p></details>
+    </div>
+  </div></section>
+
+  <div class="w band">
+    <div><h2>가게 이름부터 넣어 보세요.</h2><p>가입 없이 두 번까지 무료로 뽑아 볼 수 있습니다.</p></div>
+    <a class="btn btn-main" href="editor.html#logo"><span class="arrow">로고 만들러 가기</span></a>
+  </div>
+</main>
+
+<footer class="bleed"><div class="w">
+  <div class="fcols">
+    <div class="about"><a class="mark" href="#top"><i>간</i>간판 설계실</a><p>로고에서 간판까지, 만들 수 있는지 먼저 봅니다.</p></div>
+    <div><h4>서비스</h4><ul><li><a href="editor.html#logo">로고 만들기</a></li><li><a href="editor.html#sign">간판 디자인</a></li><li><a href="editor.html#type">간판 글씨</a></li><li><a href="editor.html#check">제작 판정</a></li><li><a href="editor.html#color">브랜드 컬러</a></li></ul></div>
+    <div><h4>간판 가이드</h4><ul><li><a href="#faq">간판 종류</a></li><li><a href="#faq">간판 비용</a></li><li><a href="#faq">간판 허가</a></li><li><a href="#faq">글꼴 라이선스</a></li></ul></div>
+    <div><h4>회사</h4><ul><li><a href="#top">소개</a></li><li><a href="#top">공지사항</a></li><li><a href="#top">제휴 문의</a></li></ul></div>
+    <div><h4>고객센터</h4><ul><li><a href="#faq">자주 묻는 질문</a></li><li><a href="#top">1:1 문의</a></li><li>평일 10:00–18:00 (예정)</li></ul></div>
+  </div>
+  <div class="legal">
+    <div class="links"><a href="#top">이용약관</a><a href="#top"><b>개인정보처리방침</b></a><a href="#top">환불 규정</a></div>
+    <p>상호 간판 설계실(가칭) · 대표자 등록 예정 · 사업자등록번호 등록 예정 · 통신판매업 신고 예정</p>
+    <p>사례 이미지는 고객A 네일 시안입니다. 공개 전 사장님 동의를 받습니다. © 2026</p>
+  </div>
+</div></footer>
+
+<script>
+const INK={pink:"#5e2530",sage:"#2f4a2c",wine:"#fbe9ec",butter:"#5a4417",blue:"#243a55",lilac:"#3d2f5a",olive:"#343816"};
+const BG={pink:"var(--pink)",sage:"var(--sage)",wine:"var(--tile-wine)",butter:"var(--butter)",blue:"var(--blue)",lilac:"var(--lilac)",olive:"var(--olive)"};
+const t=(c,inner,cap,sub)=>`<figure class="tile" style="--c:${BG[c]};--on:${INK[c]};${c==="wine"?"--cap:rgba(255,235,240,.82)":""}">${inner}<figcaption><b>${cap}</b><span>${sub||""}</span></figcaption></figure>`;
+const m=(f,extra)=>`<span class="mask" style="--m:url(a/${f}.svg);${extra||""}"></span>`;
+const mul=f=>`<img class="mul" src="a/${f}.jpg" alt="" loading="lazy">`;
+const R1=[t("pink",m("logo_en"),"잠든 고양이 · 영문","고객A 네일"),t("sage",mul("p06"),"영문 레터링","스와시"),t("wine",m("logo_kr1"),"한글 · 고양이","고객A 네일"),t("butter",mul("p02"),"심벌 · 실루엣","면 한 색"),t("blue",m("logo_kr4"),"한글 · 스와시","고객A 네일"),t("lilac",mul("p01"),"심벌 · 선","펜 한 자루"),t("olive",m("logo_plain"),"글씨만","제작 가능"),t("pink",mul("p04"),"한글 레터링","명조 + 스와시"),t("sage",mul("p03"),"꾸밈 없이","정직한 비율"),t("butter",mul("p05"),"한글 · 굵게","스와시")];
+const R2=[t("butter",`<div class="sg sg-channel">${m("logo_plain")}</div>`,"채널 간판","LED 전면 발광"),t("pink",`<div class="sg sg-stand">${m("logo_en")}</div>`,"까치발 철문자","벽에서 80 mm"),t("wine",`<div class="sg sg-neon">${m("logo_plain")}</div>`,"네온","LED 네온 플렉스"),t("sage",`<div class="sg sg-scashi">${m("logo_plain")}</div>`,"스카시","아크릴 10 t"),t("blue",`<div class="sg sg-blade"><div class="disc">${m("logo_en","background:#7a3140")}<span class="arm"></span></div></div>`,"돌출 간판","원형 양면"),t("lilac",`<div class="sg sg-flex">${m("logo_plain","background:#3d2f5a")}</div>`,"플렉스","라이트박스"),t("olive",`<div class="sg sg-awning"><span class="awn"></span>${m("logo_plain","background:#343816")}</div>`,"어닝","천막 + 글씨"),t("pink",`<div class="sg sg-aframe">${m("logo_plain")}</div>`,"입간판","A형 칠판"),t("blue",`<div class="sg sg-glass">${m("logo_en")}</div>`,"유리 시트","컷팅 시트지")];
+const F=[["Black Han Sans","고객A 네일","sage"],["Nanum Pen Script","달빛 베이커리","pink"],["Song Myung","밤편지 와인바","wine"],["Jua","소소 카페","butter"],["Gugi","해방 분식","blue"],["Gowun Batang","모래 서점","lilac"],["Do Hyeon","우리동네 국밥","olive"],["Yeon Sung","초록 꽃집","pink"],["Hahmlet","한결 치과","sage"],["Orbit","새벽 수학","butter"],["Bagel Fat One","온기 떡집","wine"],["Dongle","마루 미용실","blue"]];
+const R3=F.map(([f,s,c])=>t(c,`<div class="fs"><span class="s" style="font-family:'${f}',var(--f)">${s}</span><span class="e" style="font-family:'${f}',var(--f)">간판 1,500 mm</span></div>`,f,"상업용 가능"));
+const W=[["w01","A 영문","조건부"],["w04","E 글씨만","제작 가능"],["w02","B 한글","조건부"],["w05","S1 영문","조건부"],["w03","D 정직","조건부"],["w06","S2 영문","조건부"],["w07","C 한글","조건부"],["w08","S4 영문","조건부"]];
+const R4=W.map(([f,n,v],i)=>t(["pink","sage","butter","blue"][i%4],`<img class="photo" src="a/${f}.jpg" alt="${n} 간판을 45도에서 본 시안" loading="lazy">`,n,v));
+function put(id,arr){const one=arr.join("");document.getElementById(id).innerHTML=one+one.replace(/<figure class="tile"/g,'<figure aria-hidden="true" class="tile"');}
+put("r1",R1);put("r2",R2);put("r3",R3);put("r4",R4);
+const b=document.getElementById("burger"),sh=document.getElementById("sheet");
+b.addEventListener("click",()=>{const o=sh.classList.toggle("open");b.setAttribute("aria-expanded",o);});
+sh.addEventListener("click",e=>{if(e.target.closest("a")){sh.classList.remove("open");b.setAttribute("aria-expanded",false);}});
+</script>

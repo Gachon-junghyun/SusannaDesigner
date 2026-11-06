@@ -1,0 +1,464 @@
+<meta charset="utf-8">
+<title>드로우사인 에디터</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* 에디터는 한 가지 모습(피그마식 밝은 패널 + 어두운 상단)으로 고정한다 */
+:root{
+  --bar:#2c2c2c; --bar-ink:#f2f2f2; --bar-dim:#a8a8a8;
+  --panel:#ffffff; --line:#e6e6e6; --ink:#1e1e1e; --dim:#737373; --hover:#f2f2f2;
+  --canvas:#e5e5e5; --sel:#0d99ff; --sel-soft:#e5f4ff; --blue:#2340c4; --ok:#1f7a4d; --warn:#a2610b; --bad:#b3261e;
+  --ui:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--canvas);color:var(--ink);font:400 12px/1.4 var(--ui);overflow:hidden;word-break:keep-all;overflow-wrap:break-word}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--sel);outline-offset:1px}
+.app{display:grid;grid-template-rows:auto 1fr;height:100%}
+
+/* 상단 */
+.top{background:var(--bar);color:var(--bar-ink);display:flex;align-items:center;gap:4px;padding:6px 8px;padding-top:calc(6px + env(safe-area-inset-top,0px));min-width:0}
+.top .home{width:32px;height:32px;display:grid;place-items:center;border-radius:5px;text-decoration:none;color:var(--bar-ink);font:700 14px var(--ui)}
+.tool{width:32px;height:32px;display:grid;place-items:center;border:0;background:transparent;border-radius:5px;cursor:pointer;color:var(--bar-ink)}
+.tool:hover{background:#3d3d3d}
+.tool[aria-pressed="true"]{background:var(--sel)}
+.tool svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.5}
+.top .file{margin:0 auto;display:flex;gap:6px;align-items:center;min-width:0;white-space:nowrap;overflow:hidden}
+.top .file span{color:var(--bar-dim)}
+.top .file b{font-weight:500;overflow:hidden;text-overflow:ellipsis}
+.top .right{display:flex;align-items:center;gap:6px}
+.av{width:26px;height:26px;border-radius:50%;background:#e37a5b;color:#fff;display:grid;place-items:center;font-weight:600;font-size:11px}
+.zoom{color:var(--bar-ink);background:transparent;border:0;padding:6px 8px;border-radius:5px;cursor:pointer;font-family:var(--mono)}
+.zoom:hover{background:#3d3d3d}
+.cta{background:var(--sel);color:#fff;border:0;border-radius:5px;padding:7px 12px;font-weight:600;cursor:pointer}
+.ghost{background:transparent;color:var(--bar-ink);border:1px solid #555;border-radius:5px;padding:6px 10px;cursor:pointer}
+.mob{display:none}
+
+/* 본문 3단 */
+.main{display:grid;grid-template-columns:248px minmax(0,1fr) 264px;min-height:0}
+.side{background:var(--panel);border-right:1px solid var(--line);overflow:auto;min-height:0}
+.side.r{border-right:0;border-left:1px solid var(--line)}
+.tabs{display:flex;gap:2px;padding:8px 8px 0;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--panel);z-index:1}
+.tabs button{border:0;background:transparent;padding:8px 8px 9px;font-weight:600;color:var(--dim);cursor:pointer;border-bottom:2px solid transparent}
+.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--ink)}
+.sec{padding:10px 12px;border-bottom:1px solid var(--line);display:grid;gap:8px}
+.sec h4{margin:0;font:600 11px var(--ui);display:flex;justify-content:space-between;align-items:center}
+.sec h4 small{font-weight:400;color:var(--dim)}
+
+/* 레이어 */
+.layer{display:flex;align-items:center;gap:8px;padding:5px 8px;border-radius:4px;cursor:pointer;border:0;background:transparent;width:100%;text-align:left}
+.layer:hover{background:var(--hover)}
+.layer[aria-current="true"]{background:var(--sel-soft)}
+.layer svg{width:12px;height:12px;stroke:var(--dim);fill:none;stroke-width:1.4;flex:none}
+.layer.child{padding-left:26px;color:var(--dim)}
+
+/* 스타일 나무 */
+.branch{display:grid;gap:4px}
+.branch>b{font-size:11px;display:flex;gap:6px;align-items:center}
+.branch>b::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--sel)}
+.leaves{display:flex;flex-wrap:wrap;gap:4px;padding-left:12px;border-left:1px solid var(--line);margin-left:2px}
+.leaf{border:1px solid var(--line);background:#fff;border-radius:99px;padding:3px 9px;cursor:pointer;font-size:11.5px}
+.leaf:hover{border-color:#bdbdbd}
+.leaf[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.addleaf{display:grid;gap:6px}
+.addleaf input,.addleaf select,.addleaf textarea{width:100%;border:1px solid var(--line);border-radius:4px;padding:6px 7px;font:inherit;background:#fff}
+.addleaf textarea{min-height:48px;resize:vertical}
+.small-btn{border:1px solid var(--line);background:#fff;border-radius:4px;padding:6px 8px;cursor:pointer;font-weight:500}
+.small-btn:hover{background:var(--hover)}
+
+/* 캔버스 */
+.canvas{position:relative;overflow:auto;min-height:0;cursor:default}
+.canvas.hand{cursor:grab}
+.board{position:relative;transform-origin:0 0;padding:40px;display:grid;grid-template-columns:auto auto;gap:56px 48px;width:max-content}
+.frame{position:relative}
+.frame .fl{position:absolute;top:-20px;left:0;font-size:11px;color:#5b5b5b;white-space:nowrap}
+.frame .fb{background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.06)}
+.frame.sel .fb{box-shadow:0 0 0 2px var(--sel)}
+.frame.sel .fl{color:var(--sel)}
+.f-three .fb{width:780px;display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+.opt{padding:18px 16px 12px;display:grid;gap:8px;cursor:pointer;border-right:1px solid #f0f0f0;position:relative}
+.opt:last-child{border-right:0}
+.opt .logo{aspect-ratio:4/3;display:grid;place-items:center}
+.opt .logo svg{width:100%;height:100%}
+.opt .cap{display:flex;justify-content:space-between;font-size:11px;color:var(--dim)}
+.opt[aria-pressed="true"]{background:#f7fbff}
+.opt[aria-pressed="true"] .cap b{color:var(--sel)}
+.wm{position:absolute;inset:auto 8px 34px auto;font:500 10px var(--mono);color:rgba(0,0,0,.28);transform:rotate(-8deg)}
+.gen .opt .logo{animation:pulse 1s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.25}}
+
+.f-wall .fb{width:560px;height:420px;overflow:hidden;position:relative;display:grid;place-items:center;perspective:1100px}
+.wall{position:absolute;inset:0}
+.sign{width:62%;transform:rotateY(-34deg) rotateX(2deg);transform-style:preserve-3d;transition:transform .3s}
+.sign svg{width:100%;height:auto;display:block;overflow:visible}
+.wall-tag{position:absolute;left:10px;bottom:8px;font:500 10.5px var(--mono);color:rgba(0,0,0,.55);background:rgba(255,255,255,.7);padding:2px 6px;border-radius:3px}
+
+.f-front .fb{width:560px;height:420px;display:grid;place-items:center;position:relative}
+.front{width:66%;position:relative}
+.front svg{width:100%;height:auto;display:block}
+.dimx,.dimy{position:absolute;font:500 10.5px var(--mono);color:var(--blue);display:flex;align-items:center;justify-content:center}
+.dimx{left:0;right:0;top:-26px;height:14px;border-left:1px solid var(--blue);border-right:1px solid var(--blue)}
+.dimx::before{content:"";position:absolute;left:0;right:0;top:7px;height:1px;background:var(--blue)}
+.dimx span,.dimy span{background:#fff;padding:0 4px;position:relative}
+.dimy{top:0;bottom:0;right:-40px;width:14px;border-top:1px solid var(--blue);border-bottom:1px solid var(--blue)}
+.dimy::before{content:"";position:absolute;top:0;bottom:0;left:7px;width:1px;background:var(--blue)}
+.dimy span{writing-mode:vertical-rl}
+
+.f-verdict .fb{width:780px;padding:18px 20px}
+.vt{width:100%;border-collapse:collapse;font-size:12px}
+.vt th,.vt td{text-align:left;padding:8px 6px;border-bottom:1px solid #eee}
+.vt th{font:500 10.5px var(--mono);color:var(--dim)}
+.vt td.n{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.pill{display:inline-block;padding:2px 8px;border-radius:99px;font-weight:600;font-size:11px}
+.pill.ok{background:#e3f3ea;color:var(--ok)} .pill.warn{background:#fbefdc;color:var(--warn)} .pill.bad{background:#fbe4e2;color:var(--bad)}
+.why{margin:10px 0 0;color:var(--dim);line-height:1.6}
+
+/* 오른쪽 속성 */
+.kv{display:grid;grid-template-columns:64px 1fr;gap:6px 8px;align-items:center}
+.kv span{color:var(--dim)}
+.kv input[type="text"]{border:1px solid transparent;border-radius:4px;padding:5px 6px;font:inherit;background:var(--hover);width:100%}
+.kv input[type="text"]:focus{border-color:var(--sel);background:#fff}
+.swatches{display:flex;flex-wrap:wrap;gap:6px}
+.swatch{width:24px;height:24px;border-radius:5px;border:1px solid rgba(0,0,0,.12);cursor:pointer;padding:0}
+.swatch[aria-pressed="true"]{box-shadow:0 0 0 2px #fff,0 0 0 4px var(--sel)}
+.range{display:grid;grid-template-columns:1fr 84px;gap:8px;align-items:center}
+.range input{width:100%;accent-color:var(--sel)}
+.range output{white-space:nowrap;font-family:var(--mono);text-align:right;background:var(--hover);border-radius:4px;padding:4px 6px}
+.map{font-size:11.5px;color:var(--dim);display:grid;gap:4px}
+.map b{color:var(--ink);font-weight:500}
+.big{font:600 13px var(--ui);display:flex;justify-content:space-between;align-items:center}
+.genbtn{width:100%;background:var(--ink);color:#fff;border:0;border-radius:6px;padding:10px;font-weight:600;cursor:pointer}
+.genbtn:disabled{opacity:.5;cursor:default}
+.left-count{font:500 11px var(--mono);color:var(--dim);text-align:center}
+.paywall{border:1px solid var(--line);border-radius:6px;padding:10px;display:grid;gap:8px;background:#fafafa}
+.paywall .row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.paywall b{font-family:var(--mono)}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--bar);color:#fff;padding:9px 14px;border-radius:6px;font-size:12px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:20;max-width:calc(100% - 32px)}
+.toast.on{opacity:1}
+.hint{font-size:11px;color:var(--dim);line-height:1.55}
+
+/* 좁은 화면: 패널을 서랍으로 */
+@media (max-width:900px){
+  .main{grid-template-columns:minmax(0,1fr)}
+  .side{position:fixed;top:48px;bottom:0;width:min(300px,86vw);z-index:10;box-shadow:0 8px 30px rgba(0,0,0,.18);transform:translateX(-105%);transition:transform .2s}
+  .side.r{right:0;left:auto;transform:translateX(105%)}
+  .side.l{left:0}
+  .side.open{transform:none}
+  .mob{display:inline-block}
+  .top .tool.opt-hide,.top .ghost,.top .file span{display:none}
+}
+@media (prefers-reduced-motion:reduce){.gen .opt .logo{animation:none}.side{transition:none}}
+</style>
+
+<div class="app">
+  <header class="top">
+    <a class="home" href="index.html" title="랜딩으로">◆</a>
+    <button class="tool mob" id="openL" aria-label="레이어 열기"><svg viewBox="0 0 16 16"><path d="M2 4h12M2 8h12M2 12h12"/></svg></button>
+    <button class="tool opt-hide" data-tool="move" aria-pressed="true" title="이동 V"><svg viewBox="0 0 16 16"><path d="M3 2l9 5-4 1-1 4z"/></svg></button>
+    <button class="tool opt-hide" data-tool="frame" aria-pressed="false" title="프레임 F"><svg viewBox="0 0 16 16"><path d="M5 1v14M11 1v14M1 5h14M1 11h14"/></svg></button>
+    <button class="tool opt-hide" data-tool="text" aria-pressed="false" title="글자 T"><svg viewBox="0 0 16 16"><path d="M3 3h10M8 3v10"/></svg></button>
+    <button class="tool opt-hide" data-tool="hand" aria-pressed="false" title="손 H"><svg viewBox="0 0 16 16"><path d="M5 8V3.5a1 1 0 012 0V7m0-4a1 1 0 012 0v4m0-3a1 1 0 012 0v5c0 3-2 5-4.5 5S4 12.5 3 10.5L2 8.5a1 1 0 011.7-1L5 9"/></svg></button>
+    <div class="file"><span>예시 /</span><b id="fileName">고객A 네일 · 까치발 철문자</b></div>
+    <div class="right">
+      <button class="zoom" id="zoomBtn" title="크기 맞춤">72%</button>
+      <span class="av" aria-hidden="true">정</span>
+      <button class="ghost" id="shareBtn">공유</button>
+      <button class="cta" id="orderBtn">의뢰 25,000원</button>
+      <button class="tool mob" id="openR" aria-label="속성 열기"><svg viewBox="0 0 16 16"><path d="M3 4h10M3 8h10M3 12h6"/><circle cx="11" cy="12" r="1.5"/></svg></button>
+    </div>
+  </header>
+
+  <div class="main">
+    <aside class="side l" id="left">
+      <div class="tabs" role="tablist">
+        <button role="tab" aria-selected="false" id="tabLayers">레이어</button>
+        <button role="tab" aria-selected="true" id="tabTree">스타일 나무</button>
+      </div>
+      <div id="paneLayers" hidden>
+        <div class="sec">
+          <h4>페이지 <small>1</small></h4>
+          <button class="layer" aria-current="true"><svg viewBox="0 0 12 12"><rect x="1.5" y="1.5" width="9" height="9"/></svg>시안 v3</button>
+        </div>
+        <div class="sec" id="layerList"></div>
+      </div>
+      <div id="paneTree">
+        <div class="sec"><p class="hint">갈래마다 잎을 하나씩 고르면 AI가 그 조합으로 3안을 뽑습니다. 잎마다 «실제로 뭘로 만드나»가 붙어 있습니다.</p></div>
+        <div class="sec" id="tree"></div>
+        <div class="sec">
+          <h4>잎 추가 <small>나만의 분위기</small></h4>
+          <form class="addleaf" id="addLeaf">
+            <label for="leafName" class="hint">이름</label>
+            <input id="leafName" placeholder="예: 노란 사막" required>
+            <label for="leafBranch" class="hint">갈래</label>
+            <select id="leafBranch"></select>
+            <label for="leafMap" class="hint">실제로 뭘로 만드나 (모르면 비워 두기)</label>
+            <input id="leafMap" placeholder="예: 샌드 계열 도장 · 배경은 그림 전용">
+            <label for="leafPrompt" class="hint">AI에 넣을 말</label>
+            <textarea id="leafPrompt" placeholder="sun-bleached ochre desert, warm sand, dusty haze"></textarea>
+            <button class="small-btn" type="submit">나무에 붙이기</button>
+          </form>
+        </div>
+      </div>
+    </aside>
+
+    <div class="canvas" id="canvas" tabindex="0" aria-label="캔버스">
+      <div class="board" id="board">
+        <div class="frame f-three" data-frame="three" style="grid-column:1/3">
+          <div class="fl">로고 3안 · 글씨만 다름</div>
+          <div class="fb" id="three"></div>
+        </div>
+        <div class="frame f-wall" data-frame="wall">
+          <div class="fl">벽 위 45° 시안</div>
+          <div class="fb" id="wallBox"><div class="wall" id="wall"></div><div class="sign" id="sign"></div><span class="wall-tag" id="wallTag"></span></div>
+        </div>
+        <div class="frame f-front" data-frame="front">
+          <div class="fl">정면 · 치수</div>
+          <div class="fb"><div class="front" id="front"><div class="dimx"><span id="dimW"></span></div><div class="dimy"><span id="dimH"></span></div><div id="frontSvg"></div></div></div>
+        </div>
+        <div class="frame f-verdict" data-frame="verdict" style="grid-column:1/3">
+          <div class="fl">제작 판정 · T9 까치발 철문자</div>
+          <div class="fb" id="verdict"></div>
+        </div>
+      </div>
+    </div>
+
+    <aside class="side r" id="right">
+      <div class="sec">
+        <h4>가게 카드</h4>
+        <div class="kv">
+          <span>상호</span><input type="text" id="shop" value="고객A 네일">
+          <span>업종</span><input type="text" id="biz" value="네일">
+          <span>간판</span><input type="text" id="kind" value="까치발 철문자 (T9)">
+        </div>
+        <p class="hint" id="shopHint">예시 파일입니다. 상호를 바꾸면 다음 생성부터 그 이름으로 뽑습니다.</p>
+      </div>
+      <div class="sec">
+        <h4>선택 <small id="selName">벽 위 45° 시안</small></h4>
+      </div>
+      <div class="sec">
+        <h4>브랜드 컬러 <small>퍼스널 컬러 3벌</small></h4>
+        <div class="swatches" id="inks"></div>
+        <p class="hint" id="inkName"></p>
+      </div>
+      <div class="sec">
+        <h4>크기</h4>
+        <div class="range"><input type="range" id="width" min="900" max="3000" step="50" value="1500" aria-label="가로 mm"><output id="widthOut">1,500 mm</output></div>
+        <h4>벽에서 띄우기</h4>
+        <div class="range"><input type="range" id="gap" min="40" max="120" step="5" value="80" aria-label="이격 mm"><output id="gapOut">80 mm</output></div>
+      </div>
+      <div class="sec">
+        <h4>고른 잎 → 실제 제작</h4>
+        <div class="map" id="map"></div>
+      </div>
+      <div class="sec">
+        <div class="big"><span>판정</span><span id="verdictPill"></span></div>
+        <p class="hint" id="verdictWhy"></p>
+      </div>
+      <div class="sec">
+        <button class="genbtn" id="gen">이 조합으로 3안 뽑기</button>
+        <p class="left-count" id="left-count"></p>
+        <div class="paywall" id="paywall" hidden>
+          <div class="row"><span>고화질 3안 + 원본</span><b>6,000원</b></div>
+          <div class="row"><span>사람이 다듬는 의뢰 · 24시간</span><b>25,000원</b></div>
+          <p class="hint">프로토타입이라 결제는 연결돼 있지 않습니다.</p>
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script type="text/plain" id="svg-logo_en"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1300.0 985.1"><path fill="#8b4f4a" fill-rule="evenodd" d="M450,250H850V500H450Z M500,300V450H800V300Z"/></svg></script>
+<script type="text/plain" id="svg-logo_kr1"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1300.0 889.4"><path fill="#8b4f4a" fill-rule="evenodd" d="M450,250H850V500H450Z M500,300V450H800V300Z"/></svg></script>
+<script type="text/plain" id="svg-logo_kr4"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1300.0 932.5"><path fill="#8b4f4a" fill-rule="evenodd" d="M450,250H850V500H450Z M500,300V450H800V300Z"/></svg></script>
+<script type="text/plain" id="svg-logo_plain"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1300.0 552.8"><path fill="#8b4f4a" fill-rule="evenodd" d="M450,250H850V500H450Z M500,300V450H800V300Z"/></svg></script>
+<script>
+(function(){
+const $=s=>document.querySelector(s);
+const LOGOS={
+  logo_en:{name:"A · 영문",file:"a/logo_en.svg",stroke:7.6,gap:8,pieces:16},
+  logo_kr1:{name:"B · 한글",file:"a/logo_kr1.svg",stroke:6.0,gap:8,pieces:24},
+  logo_kr4:{name:"C · 한글 스와시",file:"a/logo_kr4.svg",stroke:7.0,gap:8,pieces:21},
+  logo_plain:{name:"E · 글씨만",file:"a/logo_plain.svg",stroke:10.0,gap:91,pieces:12}
+};
+const INKS=[
+  {c:"#8b4f4a",n:"로즈브라운 · 블러시 벽과 짝"},
+  {c:"#5a4034",n:"코코아 · 토프 벽과 짝"},
+  {c:"#5d6440",n:"올리브 · 크림 벽과 짝"},
+  {c:"#1f1f1f",n:"먹 · 어떤 벽에도"},
+  {c:"#b08a4e",n:"샴페인 골드 · 어두운 벽에서 빛남"}
+];
+const TREE=[
+  {k:"expr",name:"표현",leaves:[
+    {n:"면(실루엣)",map:"철판 한 장으로 따냄 — 까치발에 가장 유리"},
+    {n:"선",map:"선 굵기 × 실제 크기가 38 mm 아래면 불가"},
+    {n:"일러스트",map:"출력 시트 또는 UV 인쇄 판"},
+    {n:"만화",map:"면 3색 이하로 줄여 채널로"},
+    {n:"빈티지",map:"부식 철판 · 에폭시 도장"}]},
+  {k:"mat",name:"재질",leaves:[
+    {n:"도장 철판",map:"5 mm 철판 + 분체 도장",fill:"ink"},
+    {n:"헤어라인 스테인리스",map:"STS 헤어라인 1.2 t 접이 채널",fill:"steel"},
+    {n:"골드 티타늄",map:"티타늄 골드 코팅 STS",fill:"gold"},
+    {n:"부식 철판",map:"코르텐 · 녹 안정화 코팅",fill:"rust"}]},
+  {k:"bg",name:"배경(벽)",leaves:[
+    {n:"블러시 도장 벽",map:"벽 시뮬 전용",wall:"blush"},
+    {n:"자글자글 시멘트",map:"벽 시뮬 전용 — 까치발 앙카 위치 확인",wall:"cement"},
+    {n:"노출 콘크리트",map:"벽 시뮬 전용 — 폼타이 구멍 피해서 타공",wall:"concrete"},
+    {n:"붉은 벽돌",map:"벽 시뮬 전용 — 줄눈에 앙카",wall:"brick"},
+    {n:"노란 사막",map:"색만 가져감 — 샌드 계열 도장",wall:"desert"}]},
+  {k:"mood",name:"분위기",leaves:[
+    {n:"부드럽고 우아하게",map:"가는 획은 최소 10 mm 유지"},
+    {n:"고급",map:"색 1~2 · 그라데이션 없음"},
+    {n:"귀엽게",map:"둥근 면 · 굵은 획"},
+    {n:"차분하게",map:"넓은 자간 · 낮은 채도"}]}
+];
+const S={logo:"logo_en",ink:0,width:1500,gap:80,pick:{expr:"면(실루엣)",mat:"도장 철판",bg:"블러시 도장 벽",mood:"부드럽고 우아하게"},free:2,frame:"wall",zoom:.72,order:["logo_en","logo_kr1","logo_kr4"]};
+const svgText={};
+
+try{const saved=JSON.parse(localStorage.getItem("ad_leaves")||"[]");saved.forEach(l=>{const b=TREE.find(t=>t.k===l.k);if(b&&!b.leaves.some(x=>x.n===l.n))b.leaves.push(l)});}catch(_){}
+try{const shop=localStorage.getItem("ad_shop");if(shop){$("#shop").value=shop;$("#fileName").textContent=shop+" · 새 파일";$("#shopHint").textContent="아래 그림은 고객A 네일 예시입니다. «3안 뽑기»를 누르면 "+shop+" 이름으로 뽑습니다(API 연결 뒤).";}}catch(_){}
+
+function leaf(k){const b=TREE.find(t=>t.k===k);return b.leaves.find(l=>l.n===S.pick[k])||b.leaves[0];}
+function fillFor(id){
+  const m=leaf("mat").fill||"ink";
+  if(m==="ink")return {fill:INKS[S.ink].c,defs:""};
+  const g={steel:["#eef0f2","#9aa1a8","#d9dde1","#7d858d"],gold:["#f3dfa6","#b08a4e","#e8cf8e","#8e6a33"],rust:["#9a5a36","#6b3a22","#b0703f","#5a2f1c"]}[m];
+  const stops=g.map((c,i)=>`<stop offset="${i/(g.length-1)}" stop-color="${c}"/>`).join("");
+  const hair=m==="steel"?`<pattern id="h${id}" width="4" height="1" patternUnits="userSpaceOnUse"><rect width="4" height="1" fill="url(#g${id})"/><rect width="4" height=".35" fill="rgba(255,255,255,.35)"/></pattern>`:"";
+  return {fill:m==="steel"?`url(#h${id})`:`url(#g${id})`,defs:`<defs><linearGradient id="g${id}" x1="0" y1="0" x2="1" y2="1">${stops}</linearGradient>${hair}</defs>`};
+}
+let uid=0;
+function logoSvg(key,extra){
+  const t=svgText[key]; if(!t) return "";
+  const id=++uid; const f=fillFor(id);
+  return t.replace(/<svg([^>]*)>/,`<svg$1 ${extra||""}>${f.defs}`).replace(/fill="#8b4f4a"/g,`fill="${f.fill}"`);
+}
+function vb(key){const m=(svgText[key]||"").match(/viewBox="0 0 ([\d.]+) ([\d.]+)"/);return m?[+m[1],+m[2]]:[1300,985];}
+
+const WALLS={
+  blush:"background:#efd6d0",
+  cement:`background-color:#aeaba5;background-image:url("data:image/svg+xml,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="220" height="220"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="3" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 .2  0 0 0 0 .2  0 0 0 0 .19  0 0 0 .55 0"/></filter><rect width="220" height="220" filter="url(#n)"/></svg>')}"),radial-gradient(circle at 30% 20%,rgba(255,255,255,.18),transparent 60%)`,
+  concrete:`background-color:#c6c5c0;background-image:radial-gradient(circle,#8e8c86 0 3px,transparent 4px),linear-gradient(#0000 0 49.6%,rgba(0,0,0,.08) 50%,#0000 50.4%),linear-gradient(90deg,#0000 0 49.7%,rgba(0,0,0,.08) 50%,#0000 50.3%);background-size:140px 70px,280px 140px,280px 140px;background-position:35px 17px,0 0,0 0`,
+  brick:`background-color:#a4533e;background-image:linear-gradient(#e2d6cc 0 3px,transparent 3px),linear-gradient(90deg,#e2d6cc 0 3px,transparent 3px),linear-gradient(#e2d6cc 0 3px,transparent 3px),linear-gradient(90deg,#e2d6cc 0 3px,transparent 3px);background-size:100% 34px,64px 34px,100% 34px,64px 34px;background-position:0 0,0 0,0 17px,32px 17px`,
+  desert:`background:linear-gradient(180deg,#e9cf8e,#d9b56c 70%,#c99f58)`
+};
+
+function renderTree(){
+  $("#tree").innerHTML=TREE.map(b=>`<div class="branch"><b>${b.name}</b><div class="leaves">${b.leaves.map(l=>`<button class="leaf" data-k="${b.k}" data-n="${l.n}" aria-pressed="${S.pick[b.k]===l.n}" title="${l.map||""}">${l.n}</button>`).join("")}</div></div>`).join("");
+  $("#leafBranch").innerHTML=TREE.map(b=>`<option value="${b.k}">${b.name}</option>`).join("");
+}
+function renderLayers(){
+  const L=[["three","로고 3안",["A · 영문","B · 한글","C · 한글 스와시"]],["wall","벽 위 45° 시안",["벽","간판"]],["front","정면 · 치수",[]],["verdict","제작 판정",[]]];
+  $("#layerList").innerHTML=`<h4>레이어</h4>`+L.map(([k,n,c])=>`<button class="layer" data-frame="${k}" aria-current="${S.frame===k}"><svg viewBox="0 0 12 12"><path d="M4 1v10M8 1v10M1 4h10M1 8h10"/></svg>${n}</button>`+c.map(x=>`<button class="layer child" data-frame="${k}">${x}</button>`).join("")).join("");
+}
+function renderThree(){
+  $("#three").innerHTML=S.order.map((k,i)=>`<div class="opt" data-logo="${k}" aria-pressed="${S.logo===k}" role="button" tabindex="0"><div class="logo">${logoSvg(k)}</div><div class="cap"><b>${LOGOS[k].name}</b><span>${["1안","2안","3안"][i]}</span></div>${S.free<2?'<span class="wm">미리보기</span>':''}</div>`).join("");
+}
+function renderWall(){
+  const w=leaf("bg").wall||"blush";
+  $("#wall").setAttribute("style",WALLS[w]);
+  const g=S.gap, d=Math.round(g/8);
+  const sign=$("#sign");
+  sign.style.width=Math.min(84,Math.max(38,62*S.width/1500))+"%";
+  sign.innerHTML=logoSvg(S.logo,`style="filter:drop-shadow(${-d}px ${Math.round(d*.7)}px ${Math.round(d*.9)}px rgba(0,0,0,.38))"`);
+  $("#wallTag").textContent=`${leaf("bg").n} · ${leaf("mat").n} · 이격 ${g} mm`;
+}
+function renderFront(){
+  $("#frontSvg").innerHTML=logoSvg(S.logo);
+  const [w,h]=vb(S.logo); const H=Math.round(S.width*h/w/5)*5;
+  $("#dimW").textContent=S.width.toLocaleString()+" mm"; $("#dimH").textContent=H.toLocaleString()+" mm";
+  return H;
+}
+function judge(){
+  const L=LOGOS[S.logo], r=S.width/1500;
+  const stroke=+(L.stroke*r).toFixed(1), gap=+(L.gap*r).toFixed(1);
+  const needGap=13, needStroke=6;
+  let st="ok",why=[];
+  if(gap<needGap){st="warn";why.push(`고양이 안쪽 흰 선 ${gap} mm — 봉(지름 10 mm)+여유 3 mm가 안 들어감. 가로를 ${Math.ceil(1500*needGap/L.gap/50)*50} mm 이상으로 키우거나 선을 넓히면 풀림`);}
+  if(stroke<needStroke){st="bad";why.push(`가장 가는 획 ${stroke} mm — 5 mm 철판 레이저 하한 아래. 굵게 하거나 부제를 따로 판으로`);}
+  if(leaf("expr").n==="선"&&stroke<38){st=st==="bad"?"bad":"warn";why.push("선 표현은 절곡 채널이면 획 38 mm 이상 필요 — 까치발 철문자면 괜찮음");}
+  return {st,why,stroke,gap};
+}
+function renderVerdict(){
+  const H=renderFront(); const J=judge(); const L=LOGOS[S.logo];
+  const label={ok:"제작 가능",warn:"조건부",bad:"불가"}[J.st];
+  $("#verdict").innerHTML=`<table class="vt"><thead><tr><th>항목</th><th>값</th><th>기준</th><th>판정</th></tr></thead><tbody>
+  <tr><td>크기</td><td class="n">${S.width.toLocaleString()} × ${H.toLocaleString()} mm</td><td>—</td><td></td></tr>
+  <tr><td>가장 가는 획</td><td class="n">${J.stroke} mm</td><td class="n">≥ 6 mm</td><td><span class="pill ${J.stroke>=6?"ok":"bad"}">${J.stroke>=6?"통과":"미달"}</span></td></tr>
+  <tr><td>글자 속 빈틈</td><td class="n">${J.gap} mm</td><td class="n">≥ 13 mm</td><td><span class="pill ${J.gap>=13?"ok":"warn"}">${J.gap>=13?"통과":"좁음"}</span></td></tr>
+  <tr><td>조각 수</td><td class="n">${L.pieces}</td><td>견적과 직결</td><td></td></tr>
+  <tr><td>까치발 이격</td><td class="n">${S.gap} mm</td><td class="n">40–120 mm</td><td><span class="pill ok">통과</span></td></tr>
+  <tr><td><b>종합</b></td><td colspan="2">${leaf("mat").map}</td><td><span class="pill ${J.st}">${label}</span></td></tr>
+  </tbody></table><p class="why">${J.why.length?J.why.join("<br>"):"바꿀 것 없이 만들 수 있습니다."} · 기준은 공장 확인 전 가정값입니다.</p>`;
+  $("#verdictPill").innerHTML=`<span class="pill ${J.st}">${label}</span>`;
+  $("#verdictWhy").textContent=J.why[0]||"바꿀 것 없이 만들 수 있습니다.";
+}
+function renderMap(){
+  $("#map").innerHTML=TREE.map(b=>{const l=leaf(b.k);return `<div><b>${b.name} · ${l.n}</b><br>${l.map||"아직 정하지 않음 — 사람이 확인"}</div>`}).join("");
+}
+function renderSide(){
+  $("#inks").innerHTML=INKS.map((x,i)=>`<button class="swatch" style="background:${x.c}" data-ink="${i}" aria-pressed="${S.ink===i}" aria-label="${x.n}"></button>`).join("");
+  $("#inkName").textContent=leaf("mat").fill&&leaf("mat").fill!=="ink"?`재질이 «${leaf("mat").n}»라 색 대신 금속 결로 보입니다.`:INKS[S.ink].n;
+  $("#widthOut").textContent=S.width.toLocaleString()+" mm"; $("#gapOut").textContent=S.gap+" mm";
+  $("#left-count").textContent=S.free>0?`무료 ${S.free}회 남음 · 저화질 · 워터마크`:"무료 생성을 다 썼습니다";
+  $("#gen").disabled=S.free<=0; $("#paywall").hidden=S.free>0;
+  const names={three:"로고 3안",wall:"벽 위 45° 시안",front:"정면 · 치수",verdict:"제작 판정"};
+  $("#selName").textContent=names[S.frame];
+  document.querySelectorAll(".frame").forEach(f=>f.classList.toggle("sel",f.dataset.frame===S.frame));
+}
+function all(){renderTree();renderLayers();renderThree();renderWall();renderVerdict();renderMap();renderSide();}
+
+function toast(t){const e=$("#toast");e.textContent=t;e.classList.add("on");clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove("on"),2600);}
+
+document.addEventListener("click",e=>{
+  const lf=e.target.closest(".leaf"); if(lf){S.pick[lf.dataset.k]=lf.dataset.n;all();return;}
+  const op=e.target.closest(".opt"); if(op){S.logo=op.dataset.logo;S.frame="three";all();return;}
+  const sw=e.target.closest(".swatch"); if(sw){S.ink=+sw.dataset.ink;all();return;}
+  const ly=e.target.closest(".layer[data-frame]"); if(ly){S.frame=ly.dataset.frame;renderLayers();renderSide();document.querySelector(`.frame[data-frame="${S.frame}"]`).scrollIntoView({behavior:"smooth",block:"center",inline:"center"});return;}
+  const fr=e.target.closest(".frame"); if(fr&&!op){S.frame=fr.dataset.frame;renderLayers();renderSide();}
+  const tl=e.target.closest(".tool[data-tool]"); if(tl){document.querySelectorAll(".tool[data-tool]").forEach(b=>b.setAttribute("aria-pressed",b===tl));$("#canvas").classList.toggle("hand",tl.dataset.tool==="hand");if(tl.dataset.tool==="text"||tl.dataset.tool==="frame")toast("프로토타입: 글자·프레임 도구는 다음 단계에서 붙입니다");}
+});
+document.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.classList.contains("opt")){e.target.click();}});
+$("#tabLayers").onclick=()=>{$("#tabLayers").setAttribute("aria-selected",true);$("#tabTree").setAttribute("aria-selected",false);$("#paneLayers").hidden=false;$("#paneTree").hidden=true;};
+$("#tabTree").onclick=()=>{$("#tabTree").setAttribute("aria-selected",true);$("#tabLayers").setAttribute("aria-selected",false);$("#paneLayers").hidden=true;$("#paneTree").hidden=false;};
+$("#width").oninput=e=>{S.width=+e.target.value;renderWall();renderVerdict();renderSide();};
+$("#gap").oninput=e=>{S.gap=+e.target.value;renderWall();renderVerdict();renderSide();};
+$("#shop").oninput=e=>{$("#fileName").textContent=(e.target.value||"이름 없음")+" · 까치발 철문자";};
+$("#addLeaf").onsubmit=e=>{
+  e.preventDefault();
+  const l={k:$("#leafBranch").value,n:$("#leafName").value.trim(),map:$("#leafMap").value.trim()||"아직 모름 — 사람이 확인",prompt:$("#leafPrompt").value.trim()};
+  if(!l.n)return; const b=TREE.find(t=>t.k===l.k); if(b.leaves.some(x=>x.n===l.n)){toast("같은 이름의 잎이 이미 있습니다");return;}
+  if(l.k==="bg")l.wall="desert";
+  b.leaves.push(l); S.pick[l.k]=l.n;
+  try{const s=JSON.parse(localStorage.getItem("ad_leaves")||"[]");s.push(l);localStorage.setItem("ad_leaves",JSON.stringify(s));}catch(_){}
+  e.target.reset(); all(); toast(`«${l.n}» 잎을 ${b.name} 갈래에 붙였습니다`);
+};
+$("#gen").onclick=()=>{
+  if(S.free<=0)return;
+  const t=$("#three"); t.parentElement.classList.add("gen"); $("#gen").disabled=true; $("#gen").textContent="뽑는 중…";
+  setTimeout(()=>{
+    S.free--; const pool=Object.keys(LOGOS); S.order=pool.sort(()=>Math.random()-.5).slice(0,3); S.logo=S.order[0];
+    S.ink=(S.ink+1)%INKS.length; t.parentElement.classList.remove("gen"); $("#gen").textContent="이 조합으로 3안 뽑기";
+    all(); toast(S.free>0?"프로토타입: 예시 그림을 섞어 보여 줍니다. 실제 생성은 API 연결 뒤":"무료 2회를 다 썼습니다 — 오른쪽 아래에서 이어가기");
+  },1300);
+};
+$("#orderBtn").onclick=()=>toast("의뢰 25,000원 · 24시간 · 피드백 3번 — 결제는 아직 연결 전");
+$("#shareBtn").onclick=()=>toast("공유 링크는 다음 단계에서 붙입니다");
+function setZoom(z){S.zoom=z;$("#board").style.transform=`scale(${z})`;$("#zoomBtn").textContent=Math.round(z*100)+"%";}
+$("#zoomBtn").onclick=()=>{const c=$("#canvas").clientWidth; const b=$("#board").scrollWidth/S.zoom; setZoom(Math.max(.3,Math.min(1,(c-20)/b)));};
+$("#canvas").addEventListener("wheel",e=>{if(e.ctrlKey||e.metaKey){e.preventDefault();setZoom(Math.max(.3,Math.min(2,S.zoom*(e.deltaY<0?1.1:.9))));}},{passive:false});
+let drag=null;
+$("#canvas").addEventListener("pointerdown",e=>{if(!$("#canvas").classList.contains("hand"))return;drag={x:e.clientX,y:e.clientY,l:$("#canvas").scrollLeft,t:$("#canvas").scrollTop};});
+window.addEventListener("pointermove",e=>{if(!drag)return;$("#canvas").scrollLeft=drag.l-(e.clientX-drag.x);$("#canvas").scrollTop=drag.t-(e.clientY-drag.y);});
+window.addEventListener("pointerup",()=>drag=null);
+$("#openL").onclick=()=>{$("#left").classList.toggle("open");$("#right").classList.remove("open");};
+$("#openR").onclick=()=>{$("#right").classList.toggle("open");$("#left").classList.remove("open");};
+
+Object.keys(LOGOS).forEach(k=>{const el=document.getElementById("svg-"+k);svgText[k]=el?el.textContent:"";});
+all();$("#zoomBtn").click();
+})();
+</script>

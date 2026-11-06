@@ -1,0 +1,249 @@
+{
+ "tasks": {
+  "round_edge": {
+   "desc": "채널 글자 앞 모서리 원형 마감(렌더)",
+   "methods": {
+    "geometry_bevel": {
+     "status": "버림",
+     "wins": 0,
+     "losses": 2,
+     "ties": 0,
+     "how": "형상 BEVEL(scene_arum 옛 --round). 쓰지 마라",
+     "win_jobs": []
+    },
+    "shader_bevel": {
+     "status": "시도",
+     "wins": 1,
+     "losses": 0,
+     "ties": 0,
+     "how": "scene: forge.lib.blshade.bevel_round",
+     "win_jobs": [
+      "고객K 6차"
+     ]
+    },
+    "offset_loft": {
+     "status": "시도",
+     "how": "forge/lib/roundext.py rounded_prism",
+     "wins": 1,
+     "losses": 0,
+     "ties": 0,
+     "win_jobs": [
+      "고객K 6차 모델"
+     ]
+    }
+   }
+  },
+  "joint_fill": {
+   "desc": "두 조각이 붙는 가는 자리 넓히기(철판·판)",
+   "methods": {
+    "strip_under": {
+     "status": "버림",
+     "wins": 0,
+     "losses": 1,
+     "ties": 0,
+     "how": "",
+     "win_jobs": []
+    },
+    "concave_corners": {
+     "status": "시도",
+     "wins": 1,
+     "losses": 0,
+     "ties": 0,
+     "how": "forge.lib.geom2d.fillet_fill + bezier_fill (neck 로 원인 구석부터)",
+     "win_jobs": [
+      "고객K 6차"
+     ]
+    },
+    "box_patch": {
+     "status": "버림",
+     "wins": 0,
+     "losses": 1,
+     "ties": 0,
+     "how": "",
+     "win_jobs": []
+    },
+    "s_curve": {
+     "status": "버림",
+     "wins": 0,
+     "losses": 1,
+     "ties": 0,
+     "how": "",
+     "win_jobs": []
+    }
+   }
+  },
+  "layout_check": {
+   "desc": "시안 PDF 글씨 겹침·선 가로지름 찾기",
+   "methods": {
+    "pdf_overlap_gate": {
+     "status": "시도",
+     "wins": 1,
+     "losses": 0,
+     "ties": 0,
+     "how": "forge gate: pdf_overlap",
+     "win_jobs": [
+      "고객K 6차"
+     ]
+    },
+    "eye_only": {
+     "status": "시도",
+     "wins": 0,
+     "losses": 1,
+     "ties": 0,
+     "how": "",
+     "win_jobs": []
+    }
+   }
+  },
+  "option_review": {
+   "desc": "옵션(원형 마감 등)을 켰을 때 생긴 결함 찾기",
+   "methods": {
+    "diff_sheet": {
+     "status": "시도",
+     "wins": 1,
+     "losses": 0,
+     "ties": 0,
+     "how": "forge diff 켬.png 끔.png",
+     "win_jobs": [
+      "고객K 6차"
+     ]
+    },
+    "eye_only": {
+     "status": "시도",
+     "wins": 0,
+     "losses": 1,
+     "ties": 0,
+     "how": "",
+     "win_jobs": []
+    }
+   }
+  },
+  "ai_bake": {
+   "desc": "1:1 시공 일러 굽기",
+   "methods": {
+    "source_ai_scale": {
+     "status": "시도",
+     "wins": 1,
+     "losses": 0,
+     "ties": 0,
+     "how": "손님 원본 .ai 를 열어 곡선·별색 그대로 키움(v4/build_ai.py, v6/build_ai6.py)",
+     "win_jobs": [
+      "고객K 4차"
+     ]
+    },
+    "polygon_svg": {
+     "status": "시도",
+     "wins": 0,
+     "losses": 1,
+     "ties": 0,
+     "how": "",
+     "win_jobs": []
+    }
+   }
+  },
+  "render_check": {
+   "desc": "렌더 묶음 끝 파일 수·크기 검사",
+   "methods": {
+    "files_auto": {
+     "status": "시도",
+     "wins": 0,
+     "losses": 0,
+     "ties": 2,
+     "how": "forge gate: files",
+     "win_jobs": []
+    },
+    "eye_only": {
+     "status": "시도",
+     "wins": 0,
+     "losses": 0,
+     "ties": 2,
+     "how": "",
+     "win_jobs": []
+    }
+   }
+  },
+  "포스터배치": {
+   "desc": "",
+   "methods": {
+    "모음표숫자로시작": {
+     "status": "시도",
+     "how": "빈 판에서 모음표 숫자(제목 9.5%H, 배율 4·1.5·1.25, 그림 42.3% 가운데 오른쪽 판 밖)로 시작 대 pgrid layout F 첫 판에서 시작, 같은 그리기 스크립트(make.py) 한 벌",
+     "wins": 0,
+     "losses": 0,
+     "ties": 2,
+     "win_jobs": []
+    },
+    "스케치재서따르기": {
+     "status": "시도",
+     "wins": 0,
+     "losses": 0,
+     "ties": 1,
+     "win_jobs": [],
+     "how": ""
+    },
+    "layout첫판": {
+     "status": "시도",
+     "wins": 0,
+     "losses": 0,
+     "ties": 1,
+     "win_jobs": [],
+     "how": ""
+    }
+   }
+  },
+  "포스터 인쇄 판형": {
+   "desc": "판정은 숫자만, 사람 판정 전",
+   "methods": {
+    "입체S 카메라만 바꿔 A3 300dpi 다시 렌더": {
+     "status": "시도",
+     "how": "",
+     "wins": 1,
+     "losses": 0,
+     "ties": 0,
+     "win_jobs": [
+      "2026-10-27 수산나 간판 홍보 A3(오케스트라 갈래 A)"
+     ]
+    },
+    "4:5 렌더(2400x3000)를 A3 폭으로 1.46배 키워 아래 붙이기": {
+     "status": "시도",
+     "wins": 0,
+     "losses": 1,
+     "ties": 0,
+     "win_jobs": [],
+     "how": ""
+    }
+   }
+  },
+  "입체 포스터 S 룩": {
+   "desc": "",
+   "methods": {
+    "유리(투과+부피 흡수), 뒤 빛판 없음": {
+     "status": "시도",
+     "how": "",
+     "wins": 0,
+     "losses": 1,
+     "ties": 0,
+     "win_jobs": []
+    },
+    "광택 청록 단일 S(10-27 A3 기본 길, scene_s.py --look dark)": {
+     "status": "시도",
+     "wins": 1,
+     "losses": 0,
+     "ties": 1,
+     "win_jobs": [
+      "2026-10-27 입체 포스터 유리·세 겹(오케스트라 갈래 C)"
+     ],
+     "how": ""
+    },
+    "세 겹 앞뒤로 비껴 쌓기(scene_s.py --look layers)": {
+     "status": "시도",
+     "how": "",
+     "wins": 0,
+     "losses": 0,
+     "ties": 1,
+     "win_jobs": []
+    }
+   }
+  }
+ }
+}

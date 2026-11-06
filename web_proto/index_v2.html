@@ -1,0 +1,147 @@
+<meta charset="utf-8">
+<title>간판 설계실 랜딩</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Do+Hyeon&family=Jua&family=Gugi&family=Nanum+Pen+Script&family=Yeon+Sung&family=Song+Myung&family=Gowun+Batang:wght@700&family=Hahmlet:wght@300;800&family=Orbit&family=Bagel+Fat+One&family=Dongle:wght@700&display=swap&text=%20%2C015m%EA%B0%84%EA%B2%B0%EA%B3%BC%EA%B5%AD%EA%B8%B0%EA%BD%83%EB%84%A4%EB%8B%AC%EB%8F%99%EB%96%A1%EB%9E%98%EB%A1%9D%EB%A3%A8%EB%A6%AC%EB%A7%88%EB%AA%A8%EB%AF%B8%EB%B0%94%EB%B0%A4%EB%B0%A5%EB%B0%A9%EB%B2%A0%EB%B2%BD%EB%B6%84%EB%B9%9B%EC%83%88%EC%84%9C%EC%86%8C%EC%88%98%EC%8B%9D%EC%8B%A4%EC%98%A8%EC%99%80%EC%9A%A9%EC%9A%B0%EC%9D%B4%EC%9D%B8%EC%9D%BC%EC%A0%90%EC%A7%80%EC%A7%91%EC%B4%88%EC%B9%98%EC%B9%B4%EC%BB%A4%ED%8C%90%ED%8E%98%ED%8E%B8%ED%95%99%ED%95%9C%ED%95%B4%ED%98%84">
+<style>
+:root{
+  --ground:#f7f6f3; --ink:#1d1c20; --dim:#6b6870; --bar:#1d1c20; --bar-ink:#f4f2ee;
+  --ui:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+  /* 타일 색 — 채도를 비슷하게 맞춘 다섯 벌 */
+  --pink:#e7b3bd; --sage:#a9c2a0; --wine:#9b4a5b; --butter:#e6cf92; --blue:#a3b6cc; --lilac:#c0b3d4; --olive:#a4a872;
+  --gutter:clamp(16px,3vw,40px);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ground:#141316;--ink:#eeebe6;--dim:#9c98a1;color-scheme:dark}}
+:root[data-theme="dark"]{--ground:#141316;--ink:#eeebe6;--dim:#9c98a1;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font:400 15px/1.5 var(--ui);padding-inline:var(--gutter);overflow-x:hidden;word-break:keep-all}
+a{color:inherit}
+:focus-visible{outline:2px solid #e7b3bd;outline-offset:2px}
+
+/* 헤더 — 스케치의 맨 위 한 줄 */
+header{background:var(--bar);color:var(--bar-ink);margin-inline:calc(-1*var(--gutter));padding:14px var(--gutter);padding-top:calc(14px + env(safe-area-inset-top,0px));display:flex;align-items:center;gap:20px}
+.logo-slot{height:40px;min-width:150px;border:1px dashed rgba(255,255,255,.35);border-radius:6px;display:grid;place-items:center;font:500 12px var(--ui);color:rgba(255,255,255,.6);padding-inline:12px}
+header nav{margin-left:auto;display:flex;gap:18px;align-items:center;font-size:14px}
+header nav a{text-decoration:none;color:rgba(255,255,255,.75)}
+header nav a:hover{color:#fff}
+.cta{background:var(--pink);color:#2a1418;border-radius:6px;padding:9px 14px;font-weight:600;text-decoration:none}
+@media (max-width:640px){header nav a.hide{display:none}}
+
+/* 네 단 */
+.rows{display:grid;gap:clamp(18px,3vw,36px);padding-block:clamp(28px,5vw,64px) 48px}
+.row{--tw:270px;--th:220px;--grow:1.22;position:relative;height:var(--th);margin-inline:calc(-1*var(--gutter));transition:height .6s cubic-bezier(.2,.75,.2,1)}
+.row:hover,.row:focus-within{height:calc(var(--th)*var(--grow));z-index:2}
+.scaler{height:100%;display:flex;align-items:center;transform-origin:50% 50%;transition:transform .6s cubic-bezier(.2,.75,.2,1)}
+.row:hover .scaler,.row:focus-within .scaler{transform:scale(var(--grow))}
+.clip{overflow:hidden;width:100%}
+.track{display:flex;gap:22px;width:max-content;animation:to-left 80s linear infinite}
+.row.right .track{animation-name:to-right}
+.row:nth-child(1) .track{animation-delay:-11s}
+.row:nth-child(3) .track{animation-delay:-37s}
+.row:hover .track{animation-duration:160s}
+@keyframes to-left{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes to-right{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+.rlabel{position:absolute;left:var(--gutter);top:-12px;z-index:3;font:600 12px var(--ui);letter-spacing:.02em;color:var(--dim);background:var(--ground);padding:2px 8px 2px 0}
+
+.tile{flex:none;width:var(--tw);height:var(--th);border-radius:6px;position:relative;overflow:hidden;display:grid;place-items:center;margin:0;background:var(--c,var(--pink));color:var(--ink-on,#2a1418)}
+.tile figcaption{position:absolute;left:12px;bottom:10px;right:12px;display:flex;justify-content:space-between;gap:8px;font:500 11.5px var(--ui);color:var(--cap,rgba(40,20,24,.72))}
+.tile figcaption b{font:600 12px var(--ui)}
+
+/* 1단: 로고 — 한 색 SVG 는 마스크로 칠하고, 흑백 그림은 곱하기로 올린다 */
+.mask{width:74%;height:62%;background:var(--ink-on);-webkit-mask:var(--m) center/contain no-repeat;mask:var(--m) center/contain no-repeat}
+.mul{width:82%;height:66%;object-fit:contain;mix-blend-mode:multiply}
+
+/* 2단: 간판 종류 — 같은 글씨를 간판 방식마다 다르게 */
+.sg{position:relative;width:80%;height:58%;display:grid;place-items:center}
+.sg .mask{width:100%;height:100%}
+.sg-channel .mask{filter:drop-shadow(1px 1px 0 #3a2a1c) drop-shadow(1px 1px 0 #3a2a1c) drop-shadow(1px 1px 0 #3a2a1c) drop-shadow(2px 2px 0 #2c1f14) drop-shadow(0 0 14px rgba(255,236,190,.55))}
+.sg-stand .mask{filter:drop-shadow(-12px 9px 6px rgba(0,0,0,.32))}
+.sg-neon .mask{background:#ffe3ea;filter:drop-shadow(0 0 2px #ffc2d2) drop-shadow(0 0 8px #ff7fa3) drop-shadow(0 0 20px #ff4f86)}
+.sg-scashi .mask{filter:drop-shadow(2px 2px 0 rgba(255,255,255,.9)) drop-shadow(4px 5px 3px rgba(0,0,0,.28))}
+.sg-blade{width:auto;height:auto}
+.sg-blade .disc{width:150px;height:150px;border-radius:50%;background:#fbf6ee;box-shadow:inset 0 0 0 6px #7a3140,0 10px 18px rgba(0,0,0,.25);display:grid;place-items:center;position:relative}
+.sg-blade .disc .mask{width:70%;height:60%}
+.sg-blade .arm{position:absolute;right:-46px;top:50%;width:46px;height:8px;background:#3a3a3a;border-radius:2px;transform:translateY(-50%)}
+.sg-flex{width:86%;height:52%;background:linear-gradient(#fffdf8,#fff4e6);border-radius:3px;box-shadow:0 0 0 5px #ece4d8,0 0 26px rgba(255,248,225,.9),0 12px 16px rgba(0,0,0,.2)}
+.sg-flex .mask{width:78%;height:70%}
+.sg-awning{width:100%;height:100%;display:grid;grid-template-rows:38% 1fr;place-items:center}
+.sg-awning .awn{width:100%;height:100%;background:repeating-linear-gradient(90deg,#fbf3ea 0 26px,#7a3140 26px 52px);-webkit-mask:radial-gradient(13px at 13px 100%,#0000 98%,#000) 0 0/26px 100%;mask:radial-gradient(13px at 13px 100%,#0000 98%,#000) 0 0/26px 100%;box-shadow:0 8px 10px rgba(0,0,0,.2)}
+.sg-awning .mask{width:70%;height:70%}
+.sg-aframe{width:auto;height:88%;aspect-ratio:.72;background:#2f3a30;clip-path:polygon(12% 0,88% 0,100% 100%,0 100%);display:grid;place-items:center;box-shadow:0 10px 16px rgba(0,0,0,.3)}
+.sg-aframe .mask{width:70%;height:40%;background:#f2eee4}
+.sg-glass{width:88%;height:62%;background:linear-gradient(115deg,rgba(255,255,255,.45),rgba(255,255,255,.08) 40%,rgba(255,255,255,.3) 70%,rgba(255,255,255,.05));border:6px solid #3c3b40;display:grid;place-items:center}
+.sg-glass .mask{width:76%;height:62%;background:#fff;filter:drop-shadow(0 0 1px rgba(0,0,0,.25))}
+
+/* 3단: 간판 글씨 */
+.spec{display:grid;gap:4px;text-align:center;padding-inline:14px}
+.spec .s{font-size:44px;line-height:1.05;color:var(--ink-on)}
+.spec .e{font-size:15px;opacity:.75;color:var(--ink-on)}
+
+/* 4단: 벽 위 시안 */
+.photo{width:100%;height:100%;object-fit:cover}
+
+@media (max-width:640px){.row{--tw:190px;--th:160px;--grow:1.14}.spec .s{font-size:32px}.sg-blade .disc{width:104px;height:104px}}
+@media (prefers-reduced-motion:reduce){.track{animation:none}.clip{overflow-x:auto}.row,.scaler{transition:none}.row:hover,.row:focus-within{height:var(--th)}.row:hover .scaler{transform:none}}
+</style>
+
+<header>
+  <span class="logo-slot" aria-label="로고 자리">로고 자리 · 스킬로 제작</span>
+  <nav>
+    <a class="hide" href="#rows">둘러보기</a>
+    <a class="hide" href="editor.html">에디터</a>
+    <a class="cta" href="editor.html">3안 뽑기</a>
+  </nav>
+</header>
+
+<main class="rows" id="rows">
+  <section class="row left" tabindex="0" aria-label="로고"><span class="rlabel">로고</span><div class="scaler"><div class="clip"><div class="track" id="r1"></div></div></div></section>
+  <section class="row right" tabindex="0" aria-label="간판 종류"><span class="rlabel">간판 종류</span><div class="scaler"><div class="clip"><div class="track" id="r2"></div></div></div></section>
+  <section class="row left" tabindex="0" aria-label="간판 글씨"><span class="rlabel">간판 글씨</span><div class="scaler"><div class="clip"><div class="track" id="r3"></div></div></div></section>
+  <section class="row right" tabindex="0" aria-label="벽 위 시안"><span class="rlabel">벽 위 시안</span><div class="scaler"><div class="clip"><div class="track" id="r4"></div></div></div></section>
+</main>
+
+<script>
+const INK={pink:"#5e2530",sage:"#2f4a2c",wine:"#fbe9ec",butter:"#5a4417",blue:"#243a55",lilac:"#3d2f5a",olive:"#343816"};
+const t=(c,inner,cap,sub)=>`<figure class="tile" style="--c:var(--${c});--ink-on:${INK[c]};${c==="wine"?"--cap:rgba(255,235,240,.8)":""}">${inner}<figcaption><b>${cap}</b><span>${sub||""}</span></figcaption></figure>`;
+const m=(f,extra)=>`<span class="mask" style="--m:url(a/${f}.svg);${extra||""}"></span>`;
+const mul=f=>`<img class="mul" src="a/${f}.jpg" alt="" loading="lazy">`;
+
+const R1=[
+  t("pink",m("logo_en"),"잠든 고양이 · 영문","고객A 네일"),
+  t("sage",mul("p06"),"영문 레터링","스와시"),
+  t("wine",m("logo_kr1"),"한글 · 고양이","고객A 네일"),
+  t("butter",mul("p02"),"심벌 · 실루엣","면 1색"),
+  t("blue",m("logo_kr4"),"한글 · 스와시","고객A 네일"),
+  t("lilac",mul("p01"),"심벌 · 선","펜 한 자루"),
+  t("olive",m("logo_plain"),"글씨만 · 정직","제작 가능"),
+  t("pink",mul("p04"),"한글 레터링","명조 + 스와시"),
+  t("sage",mul("p03"),"꾸밈 없이","정직한 비율"),
+  t("butter",mul("p05"),"한글 · 굵게","스와시")
+];
+const R2=[
+  t("butter",`<div class="sg sg-channel">${m("logo_plain")}</div>`,"채널 간판","LED 전면 발광"),
+  t("pink",`<div class="sg sg-stand">${m("logo_en")}</div>`,"까치발 철문자","벽에서 80 mm"),
+  t("wine",`<div class="sg sg-neon">${m("logo_plain")}</div>`,"네온","LED 네온 플렉스"),
+  t("sage",`<div class="sg sg-scashi">${m("logo_plain")}</div>`,"스카시","아크릴 10 t"),
+  t("blue",`<div class="sg sg-blade"><div class="disc">${m("logo_en","background:#7a3140")}<span class="arm"></span></div></div>`,"돌출 간판","원형 양면"),
+  t("lilac",`<div class="sg-flex sg">${m("logo_plain","background:#3d2f5a")}</div>`,"플렉스","라이트박스"),
+  t("olive",`<div class="sg-awning sg"><span class="awn"></span>${m("logo_plain","background:#343816")}</div>`,"어닝","천막 + 글씨"),
+  t("pink",`<div class="sg-aframe sg">${m("logo_plain")}</div>`,"입간판","A형 칠판"),
+  t("blue",`<div class="sg-glass sg">${m("logo_en")}</div>`,"유리 시트","컷팅 시트지")
+];
+const F=[
+  ["Black Han Sans","고객A 네일","sage"],["Nanum Pen Script","달빛 베이커리","pink"],["Song Myung","밤편지 와인바","wine"],
+  ["Jua","소소 카페","butter"],["Gugi","해방 분식","blue"],["Gowun Batang","모래 서점","lilac"],
+  ["Do Hyeon","우리동네 국밥","olive"],["Yeon Sung","초록 꽃집","pink"],["Hahmlet","한결 치과","sage"],
+  ["Orbit","새벽 수학","butter"],["Bagel Fat One","온기 떡집","wine"],["Dongle","마루 미용실","blue"]
+];
+const R3=F.map(([f,s,c])=>t(c,`<div class="spec"><span class="s" style="font-family:'${f}',var(--ui)">${s}</span><span class="e" style="font-family:'${f}',var(--ui)">간판 1,500 mm</span></div>`,f,"오픈 라이선스"));
+const W=[["w01","A 영문","조건부"],["w04","E 글씨만","제작 가능"],["w02","B 한글","조건부"],["w05","S1 영문","조건부"],["w03","D 정직","조건부"],["w06","S2 영문","조건부"],["w07","C 한글","조건부"],["w08","S4 영문","조건부"]];
+const R4=W.map(([f,n,v],i)=>t(["pink","sage","butter","blue"][i%4],`<img class="photo" src="a/${f}.jpg" alt="${n} 간판을 45도에서 본 시안" loading="lazy">`,n,v));
+
+function put(id,arr){const one=arr.join("");document.getElementById(id).innerHTML=one+one.replace(/<figure class="tile"/g,'<figure aria-hidden="true" class="tile"');}
+put("r1",R1);put("r2",R2);put("r3",R3);put("r4",R4);
+</script>

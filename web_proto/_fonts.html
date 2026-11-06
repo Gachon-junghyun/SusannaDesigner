@@ -1,0 +1,27 @@
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;800&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.1/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css">
+<style>
+@font-face{font-family:'Paperozi';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-4Regular.woff2') format('woff2');font-weight:400}
+@font-face{font-family:'Paperozi';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-7Bold.woff2') format('woff2');font-weight:700}
+@font-face{font-family:'Suit';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_suit@1.0/SUIT-Regular.woff2') format('woff2');font-weight:400}
+@font-face{font-family:'Suit';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_suit@1.0/SUIT-ExtraBold.woff2') format('woff2');font-weight:800}
+@font-face{font-family:'GMarketSans';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');font-weight:400}
+@font-face{font-family:'GMarketSans';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff') format('woff');font-weight:700}
+@font-face{font-family:'Pretendard';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Regular.woff2') format('woff2');font-weight:400}
+@font-face{font-family:'Pretendard';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-ExtraBold.woff2') format('woff2');font-weight:800}
+body{margin:0;background:#fbfaf7;color:#17161a;font-family:sans-serif;padding:24px}
+.g{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.c{border-top:2px solid #17161a;padding-top:12px}
+.c small{font:12px monospace;color:#888}
+.c h2{font-size:40px;margin:10px 0 6px;letter-spacing:-.03em}
+.c h3{font-size:24px;margin:0 0 8px}
+.c p{font-size:16px;line-height:1.65;color:#65626a;margin:0 0 10px}
+.c .nav{display:flex;gap:14px;font-size:15px;font-weight:600}
+.c .btn{display:inline-block;background:#8e3a4d;color:#fff;padding:10px 16px;border-radius:8px;font-weight:700;font-size:15px;margin-top:8px}
+</style>
+<div class="g" id="g"></div>
+<script>
+const F=[["Gothic A1 (지금)","'Gothic A1'",800],["페이퍼로지","'Paperozi'",700],["Wanted Sans","'Wanted Sans Variable'",800],["SUIT","'Suit'",800],["G마켓 산스","'GMarketSans'",700],["프리텐다드","'Pretendard'",800]];
+document.getElementById("g").innerHTML=F.map(([n,f,w])=>`<div class="c" style="font-family:${f}"><small>${n}</small><h2 style="font-weight:${w}">서비스 안내</h2><h3 style="font-weight:${w}">상호와 업종에 맞춘 로고 시안 3종</h3><p>심벌은 생성형 AI로 제작하고, 글씨는 라이선스가 확인된 서체로 조판합니다. 45° 시뮬레이션 1,500 mm</p><div class="nav"><span>서비스</span><span>고객 사례</span><span>이용 요금</span><span>간판 가이드</span></div><span class="btn">로고 제작 시작하기 →</span></div>`).join("");
+</script>
